@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const FEATURES = [
   {
@@ -72,19 +72,52 @@ const FEATURES = [
 
 export default function Features() {
   const [active, setActive] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
   const feat = FEATURES[active];
+
+  // 更新滑动指示器位置
+  useEffect(() => {
+    if (tabsRef.current) {
+      const activeBtn = tabsRef.current.children[active] as HTMLElement;
+      if (activeBtn) {
+        setIndicatorStyle({
+          left: activeBtn.offsetLeft,
+          width: activeBtn.offsetWidth,
+        });
+      }
+    }
+  }, [active]);
+
+  const handleTabChange = (index: number) => {
+    if (index === active) return;
+    setIsTransitioning(true);
+    setActive(index);
+    setTimeout(() => setIsTransitioning(false), 300);
+  };
 
   return (
     <section className="py-24 px-4" style={{ background: "#0a0a0f" }}>
       <div className="max-w-7xl mx-auto">
         {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center gap-2 mb-16">
+        <div className="relative flex flex-wrap justify-center gap-2 mb-16" ref={tabsRef}>
+          {/* 滑动指示器 */}
+          <div
+            className="absolute bottom-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300 ease-out rounded-full"
+            style={{
+              left: `${indicatorStyle.left}px`,
+              width: `${indicatorStyle.width}px`,
+              transform: 'translateY(100%)',
+            }}
+          />
           {FEATURES.map((f, i) => (
             <button
               key={f.id}
-              onClick={() => setActive(i)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                active === i ? "tag-active" : "tag-inactive"
+              onClick={() => handleTabChange(i)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                active === i ? "tag-active scale-105" : "tag-inactive hover:scale-105"
               }`}>
               {f.label}
             </button>
@@ -92,27 +125,38 @@ export default function Features() {
         </div>
 
         {/* Feature Card */}
-        <div className="glass-card rounded-3xl overflow-hidden">
+        <div className="glass-card rounded-3xl overflow-hidden group perspective-1000">
           <div className="grid lg:grid-cols-2 gap-0">
             {/* Left: Info */}
-            <div className="p-8 lg:p-12 flex flex-col justify-center">
-              <div className="text-4xl mb-4">{feat.icon}</div>
+            <div
+              className={`p-8 lg:p-12 flex flex-col justify-center transition-all duration-500 ${
+                isTransitioning ? 'opacity-0 translate-x-[-20px]' : 'opacity-100 translate-x-0'
+              }`}
+              key={`info-${active}`}>
+              <div className="text-4xl mb-4 animate-bounce-in">{feat.icon}</div>
               <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">{feat.title}</h2>
               <p className="text-white/60 text-lg mb-8 leading-relaxed">{feat.desc}</p>
 
               {/* Prompt preview */}
-              <div className="glass-card rounded-xl p-4 mb-8">
+              <div className="glass-card rounded-xl p-4 mb-8 hover:bg-white/5 transition-all duration-300">
                 <p className="text-xs text-white/40 uppercase tracking-wider mb-2">Prompt</p>
                 <p className="text-sm text-white/70 line-clamp-3">{feat.prompt}</p>
               </div>
 
-              <button className="btn-primary px-6 py-3 text-sm self-start">
+              <button className="btn-primary px-6 py-3 text-sm self-start hover:scale-105 transition-transform">
                 {feat.cta} →
               </button>
             </div>
 
             {/* Right: Video/Visual */}
-            <div className="relative min-h-[300px] lg:min-h-[500px] rounded-r-3xl overflow-hidden">
+            <div
+              className={`relative min-h-[300px] lg:min-h-[500px] rounded-r-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] ${
+                isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+              }`}
+              key={`video-${active}`}
+              style={{
+                transformStyle: 'preserve-3d',
+              }}>
               {feat.videoSrc ? (
                 <video
                   key={feat.videoSrc}

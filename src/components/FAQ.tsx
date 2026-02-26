@@ -36,28 +36,50 @@ const FAQS = [
   },
 ];
 
-function FAQItem({ q, a }: { q: string; a: string }) {
+function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b border-white/5 last:border-0">
+    <div
+      className="border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-all duration-300 rounded-lg px-2"
+      style={{
+        animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both`
+      }}>
       <button
-        className="w-full flex items-center justify-between py-5 text-left group"
+        className="w-full flex items-center justify-between py-6 text-left group"
         onClick={() => setOpen(!open)}>
-        <span className="text-white font-medium pr-4 group-hover:text-purple-300 transition-colors">
+        <span className={`font-medium pr-4 transition-all duration-300 ${
+          open ? 'text-purple-300' : 'text-white group-hover:text-purple-200'
+        }`}>
           {q}
         </span>
-        <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-          open ? "bg-purple-500/20 rotate-45" : "bg-white/5"
+        <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 ${
+          open
+            ? "bg-gradient-to-br from-purple-500/30 to-blue-500/30 rotate-180 scale-110 shadow-lg shadow-purple-500/20"
+            : "bg-white/5 group-hover:bg-white/10 group-hover:scale-110"
         }`}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 5v14M5 12h14" strokeLinecap="round"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className={`transition-transform duration-500 ${open ? 'rotate-180' : ''}`}>
+            <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </span>
       </button>
 
-      <div className={`overflow-hidden transition-all duration-300 ${open ? "max-h-96 pb-5" : "max-h-0"}`}>
-        <p className="text-white/55 leading-relaxed">{a}</p>
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          open ? "max-h-96 opacity-100 pb-6" : "max-h-0 opacity-0"
+        }`}>
+        <div className={`transform transition-all duration-500 ${
+          open ? 'translate-y-0' : '-translate-y-4'
+        }`}>
+          <p className="text-white/60 leading-relaxed text-[15px]">{a}</p>
+        </div>
       </div>
     </div>
   );
@@ -76,9 +98,9 @@ export default function FAQ() {
         </div>
 
         {/* Accordion */}
-        <div className="glass-card rounded-2xl px-6 py-2">
+        <div className="glass-card rounded-2xl px-6 py-2 hover:border-white/15 transition-all duration-300">
           {FAQS.map((item, i) => (
-            <FAQItem key={i} q={item.q} a={item.a}/>
+            <FAQItem key={i} q={item.q} a={item.a} index={i}/>
           ))}
         </div>
 

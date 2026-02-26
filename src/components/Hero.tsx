@@ -3,25 +3,59 @@ import { useState, useEffect, useRef } from "react";
 
 const MODELS = ["Seedance", "Sora 2", "Veo 3", "Kling V3", "More"];
 
-// Stars data generated once
-const STARS = Array.from({ length: 80 }, (_, i) => ({
-  id: i,
-  top:  `${Math.random() * 100}%`,
-  left: `${Math.random() * 100}%`,
-  delay: `${Math.random() * 6}s`,
-  duration: `${2 + Math.random() * 4}s`,
-  opacity: 0.1 + Math.random() * 0.5,
-  size: Math.random() > 0.85 ? 3 : Math.random() > 0.6 ? 2 : 1,
-}));
+// 视差滚动状态
+function useParallax() {
+  const [scrollY, setScrollY] = useState(0);
 
-const METEORS = Array.from({ length: 5 }, (_, i) => ({
-  id: i,
-  top:  `${5 + Math.random() * 40}%`,
-  left: `${Math.random() * 60}%`,
-  width: `${60 + Math.random() * 120}px`,
-  delay: `${i * 4 + Math.random() * 3}s`,
-  duration: `${2.5 + Math.random() * 2}s`,
-}));
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return scrollY;
+}
+
+// 生成星星数据的函数（固定种子确保一致性）
+function generateStars() {
+  return Array.from({ length: 80 }, (_, i) => {
+    // 使用索引作为伪随机种子
+    const seed1 = (i * 9301 + 49297) % 233280;
+    const seed2 = (i * 1234 + 5678) % 233280;
+    const seed3 = (i * 4321 + 8765) % 233280;
+    const rnd1 = seed1 / 233280;
+    const rnd2 = seed2 / 233280;
+    const rnd3 = seed3 / 233280;
+
+    return {
+      id: i,
+      top: `${rnd1 * 100}%`,
+      left: `${rnd2 * 100}%`,
+      delay: `${rnd3 * 6}s`,
+      duration: `${2 + rnd1 * 4}s`,
+      opacity: 0.1 + rnd2 * 0.5,
+      size: rnd3 > 0.85 ? 3 : rnd3 > 0.6 ? 2 : 1,
+    };
+  });
+}
+
+function generateMeteors() {
+  return Array.from({ length: 5 }, (_, i) => {
+    const seed1 = (i * 7919 + 12345) % 233280;
+    const seed2 = (i * 3141 + 27183) % 233280;
+    const rnd1 = seed1 / 233280;
+    const rnd2 = seed2 / 233280;
+
+    return {
+      id: i,
+      top: `${5 + rnd1 * 40}%`,
+      left: `${rnd2 * 60}%`,
+      width: `${60 + rnd1 * 120}px`,
+      delay: `${i * 4 + rnd2 * 3}s`,
+      duration: `${2.5 + rnd1 * 2}s`,
+    };
+  });
+}
 
 function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -77,32 +111,64 @@ function ParticleCanvas() {
 
 export default function Hero() {
   const [activeModel, setActiveModel] = useState("Seedance");
+  const scrollY = useParallax();
+  const [mounted, setMounted] = useState(false);
+  const [stars] = useState(() => generateStars());
+  const [meteors] = useState(() => generateMeteors());
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16"
       style={{ background: "#080810" }}>
 
       {/* ── Animated Canvas Orbs ── */}
-      <ParticleCanvas />
+      <div style={{ transform: mounted ? `translateY(${scrollY * 0.3}px)` : 'translateY(0)' }}>
+        <ParticleCanvas />
+      </div>
 
       {/* ── Scrolling grid ── */}
-      <div className="absolute inset-0 bg-grid opacity-100 pointer-events-none" style={{ maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)" }}/>
+      <div
+        className="absolute inset-0 bg-grid opacity-100 pointer-events-none"
+        style={{
+          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)",
+          transform: mounted ? `translateY(${scrollY * 0.5}px)` : 'translateY(0)'
+        }}/>
 
       {/* ── Aurora blob 1 (purple, top-center) ── */}
-      <div className="absolute top-[-10%] left-[20%] w-[700px] h-[700px] rounded-full pointer-events-none aurora-spin"
-        style={{ background: "radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, transparent 65%)", filter: "blur(40px)" }}/>
+      <div
+        className="absolute top-[-10%] left-[20%] w-[700px] h-[700px] rounded-full pointer-events-none aurora-spin"
+        style={{
+          background: "radial-gradient(ellipse, rgba(124,58,237,0.18) 0%, transparent 65%)",
+          filter: "blur(40px)",
+          transform: mounted ? `translateY(${scrollY * 0.2}px)` : 'translateY(0)'
+        }}/>
 
       {/* ── Aurora blob 2 (blue, bottom-right) ── */}
-      <div className="absolute bottom-[-5%] right-[-5%] w-[600px] h-[600px] rounded-full pointer-events-none float-animation2"
-        style={{ background: "radial-gradient(ellipse, rgba(59,130,246,0.14) 0%, transparent 65%)", filter: "blur(50px)" }}/>
+      <div
+        className="absolute bottom-[-5%] right-[-5%] w-[600px] h-[600px] rounded-full pointer-events-none float-animation2"
+        style={{
+          background: "radial-gradient(ellipse, rgba(59,130,246,0.14) 0%, transparent 65%)",
+          filter: "blur(50px)",
+          transform: mounted ? `translateY(${scrollY * 0.4}px)` : 'translateY(0)'
+        }}/>
 
       {/* ── Aurora blob 3 (cyan, left) ── */}
-      <div className="absolute top-[30%] left-[-8%] w-[400px] h-[400px] rounded-full pointer-events-none float-animation3"
-        style={{ background: "radial-gradient(ellipse, rgba(6,182,212,0.10) 0%, transparent 65%)", filter: "blur(40px)" }}/>
+      <div
+        className="absolute top-[30%] left-[-8%] w-[400px] h-[400px] rounded-full pointer-events-none float-animation3"
+        style={{
+          background: "radial-gradient(ellipse, rgba(6,182,212,0.10) 0%, transparent 65%)",
+          filter: "blur(40px)",
+          transform: mounted ? `translateY(${scrollY * 0.15}px)` : 'translateY(0)'
+        }}/>
 
       {/* ── Stars ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {STARS.map(s => (
+      <div
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+        style={{ transform: mounted ? `translateY(${scrollY * 0.1}px)` : 'translateY(0)' }}>
+        {stars.map(s => (
           <div key={s.id} className="star absolute"
             style={{
               top: s.top, left: s.left, width: s.size, height: s.size,
@@ -114,7 +180,7 @@ export default function Hero() {
 
       {/* ── Meteors ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {METEORS.map(m => (
+        {meteors.map(m => (
           <div key={m.id} className="meteor absolute"
             style={{
               top: m.top, left: m.left, width: m.width,

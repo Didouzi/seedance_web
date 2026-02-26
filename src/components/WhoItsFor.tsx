@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const PERSONAS = [
   {
@@ -59,9 +60,15 @@ const PERSONAS = [
 export default function WhoItsFor() {
   const [active, setActive] = useState(0);
   const persona = PERSONAS[active];
+  const { ref, isVisible } = useScrollAnimation(0.2);
 
   return (
-    <section className="py-24 px-4 section-divider" style={{ background: "#0a0a0f" }}>
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      className={`py-24 px-4 section-divider transition-all duration-1000 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      }`}
+      style={{ background: "#0a0a0f" }}>
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-sm text-purple-400 uppercase tracking-wider font-medium mb-3">WHO IT&apos;S FOR</p>
