@@ -69,9 +69,10 @@ export default function Navbar() {
 
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
-              {["Image to Video","Text to Video","Models & Tools","Pricing","Blog"].map(label => (
-                <NavLink key={label} href="#">{label}</NavLink>
-              ))}
+              <NavLink href="/">Home</NavLink>
+              <NavLink href="/generator">Generator</NavLink>
+              <NavLink href="/my-creations">My Creations</NavLink>
+              <NavLink href="/pricing">Pricing</NavLink>
             </div>
 
             {/* Right side */}
@@ -134,14 +135,19 @@ export default function Navbar() {
           boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
         }}>
         <div className="max-w-[1400px] mx-auto px-6 py-5 flex flex-col gap-1.5">
-          {["Image to Video","Text to Video","Models & Tools","Pricing","Blog"].map(item => (
-            <a key={item} href="#"
+          {[
+            { label: "Home", href: "/" },
+            { label: "Generator", href: "/generator" },
+            { label: "My Creations", href: "/my-creations" },
+            { label: "Pricing", href: "/pricing" }
+          ].map(item => (
+            <Link key={item.label} href={item.href}
               className="px-4 py-3.5 text-[14px] text-white/60 hover:text-white hover:bg-white/[0.04] rounded-[10px] transition-all duration-300"
               style={{ border: "1px solid transparent" }}
               onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(124,58,237,0.15)")}
               onMouseLeave={e => (e.currentTarget.style.borderColor = "transparent")}>
-              {item}
-            </a>
+              {item.label}
+            </Link>
           ))}
           <div className="mt-3 pt-4 border-t border-white/[0.06] flex gap-3">
             <button className="flex-1 py-3 text-[13px] font-medium text-white/60 hover:text-white rounded-[10px] border border-white/10 hover:border-white/20 transition-all duration-300">
