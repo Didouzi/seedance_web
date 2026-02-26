@@ -59,26 +59,90 @@ body {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+  33%       { transform: translateY(-18px) translateX(10px) scale(1.04); }
+  66%       { transform: translateY(8px) translateX(-12px) scale(0.97); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+  40%       { transform: translateY(20px) translateX(-15px) scale(1.06); }
+  70%       { transform: translateY(-10px) translateX(8px) scale(0.95); }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50%       { transform: translate(30px, -20px) scale(1.08); }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.75; }
+}
+
+@keyframes aurora {
+  0%   { transform: rotate(0deg)   scale(1);    opacity: 0.5; }
+  33%  { transform: rotate(120deg) scale(1.15); opacity: 0.8; }
+  66%  { transform: rotate(240deg) scale(0.9);  opacity: 0.4; }
+  100% { transform: rotate(360deg) scale(1);    opacity: 0.5; }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
 }
 
-.float-animation {
-  animation: float 6s ease-in-out infinite;
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
 }
 
-.pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
+@keyframes grid-move {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(60px); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(1); }
+  50%       { opacity: 0.9; transform: scale(1.4); }
+}
+
+@keyframes meteor {
+  0%   { transform: translateX(0)   translateY(0)   scaleX(1); opacity: 1; }
+  100% { transform: translateX(300px) translateY(200px) scaleX(0); opacity: 0; }
+}
+
+.float-animation  { animation: float  8s ease-in-out infinite; }
+.float-animation2 { animation: float2 11s ease-in-out infinite; }
+.float-animation3 { animation: float3 14s ease-in-out infinite; }
+.pulse-glow       { animation: pulse-glow 4s ease-in-out infinite; }
+.aurora-spin      { animation: aurora 20s linear infinite; }
+
+/* Animated grid lines */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(124,58,237,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: grid-move 8s linear infinite;
+}
+
+/* Star dots */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: white;
+}
+
+/* Meteor streak */
+.meteor {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+  border-radius: 9999px;
+  animation: meteor linear infinite;
+  opacity: 0;
 }
 
 .tag-active {
