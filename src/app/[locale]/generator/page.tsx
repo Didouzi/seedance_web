@@ -66,13 +66,7 @@ export default function GeneratorPage() {
     "Enchanted forest with glowing mushrooms and fireflies at night",
   ];
 
-  // Dashboard 统计数据
-  const stats = [
-    { label: "Videos Generated", value: videoHistory.length.toString(), change: "+12%", trend: "up" },
-    { label: "API Calls", value: "45,678", change: "+8%", trend: "up" },
-    { label: "Success Rate", value: "99.5%", change: "+0.2%", trend: "up" },
-    { label: "Credits Remaining", value: "8,500", change: "-15%", trend: "down" },
-  ];
+
 
   // 从数据库加载默认 API 密钥和历史记录
   useEffect(() => {
@@ -491,22 +485,7 @@ export default function GeneratorPage() {
             <p className="text-gray-600">Turn your ideas into cinematic videos in seconds</p>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {stats.map((stat) => (
-              <div key={stat.label} className="bg-white rounded-xl p-5 shadow-sm border border-gray-200">
-                <div className="flex items-start justify-between mb-2">
-                  <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
-                  <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
-                    stat.trend === "up" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                  }`}>
-                    {stat.change}
-                  </span>
-                </div>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-              </div>
-            ))}
-          </div>
+
 
           <div className="grid lg:grid-cols-2 gap-6">
           {/* Left Panel - Controls */}
