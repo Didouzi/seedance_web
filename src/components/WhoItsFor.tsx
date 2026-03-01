@@ -65,25 +65,32 @@ export default function WhoItsFor() {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className={`py-24 px-4 section-divider transition-all duration-1000 ${
+      className={`py-24 px-4 section-divider transition-all duration-1000 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-      }`}
-      style={{ background: "#0a0a0f" }}>
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <p className="text-sm text-purple-400 uppercase tracking-wider font-medium mb-3">WHO IT&apos;S FOR</p>
-          <h2 className="text-4xl font-bold text-white mb-4">Made for Every Creator</h2>
-          <p className="text-white/50 max-w-xl mx-auto">
+      }`}>
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <p className="text-sm text-blue-400 uppercase tracking-wider font-semibold mb-3">WHO IT&apos;S FOR</p>
+          <h2 className="text-5xl font-bold text-white mb-6 tracking-tight drop-shadow-lg">Made for Every Creator</h2>
+          <p className="text-gray-300 text-lg max-w-xl mx-auto font-medium">
             Animation, film, manga series, YouTube content, product demos. Seedance 2.0 is your AI video generator.
           </p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
           {PERSONAS.map((p, i) => (
             <button key={p.id} onClick={() => setActive(i)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                active === i ? "tag-active" : "tag-inactive"
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                active === i
+                  ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30 scale-105"
+                  : "bg-white/10 text-white border border-white/30 hover:bg-white/20 hover:scale-105 backdrop-blur-sm"
               }`}>
               {p.icon} {p.label}
             </button>
@@ -91,22 +98,28 @@ export default function WhoItsFor() {
         </div>
 
         {/* Content */}
-        <div className="glass-card rounded-3xl p-8 lg:p-12">
+        <div className="rounded-3xl p-8 lg:p-12"
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(24px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+          }}>
           <div className="mb-8">
             <div className="text-5xl mb-4">{persona.icon}</div>
-            <h3 className="text-3xl font-bold text-white mb-3">{persona.title}</h3>
-            <p className="text-white/60 text-lg">{persona.desc}</p>
+            <h3 className="text-3xl font-bold text-white mb-3 tracking-tight drop-shadow-lg">{persona.title}</h3>
+            <p className="text-gray-300 text-lg font-medium">{persona.desc}</p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             {persona.features.map(feat => (
-              <div key={feat.title} className="rounded-xl p-5 hover:border-white/15 transition-all"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div key={feat.title} className="rounded-xl p-5 transition-all hover:shadow-lg hover:bg-white/10"
+                style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}>
                 <div className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-2 flex-shrink-0"/>
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 flex-shrink-0"/>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">{feat.title}</h4>
-                    <p className="text-sm text-white/50 leading-relaxed">{feat.desc}</p>
+                    <h4 className="text-white font-semibold mb-1 drop-shadow-md">{feat.title}</h4>
+                    <p className="text-sm text-gray-300 leading-relaxed">{feat.desc}</p>
                   </div>
                 </div>
               </div>

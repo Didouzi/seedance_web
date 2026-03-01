@@ -44,7 +44,7 @@ export default function ParticleField3D() {
     canvas.addEventListener("mousemove", handleMouseMove);
 
     // 初始化粒子
-    const colors = ["#a78bfa", "#60a5fa", "#34d399", "#f472b6"];
+    const colors = ["#60a5fa", "#3b82f6", "#06b6d4", "#0ea5e9"];
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,

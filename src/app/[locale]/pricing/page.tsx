@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 export default function PricingPage() {
   const plans = [
@@ -47,6 +48,14 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen pt-24 px-4" style={{ background: "#080810" }}>
       <div className="max-w-7xl mx-auto">
+        {/* Back Button */}
+        <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 group">
+          <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="text-sm font-medium">返回首页</span>
+        </Link>
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-3">Simple, Transparent Pricing</h1>

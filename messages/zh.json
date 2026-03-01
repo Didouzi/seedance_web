@@ -1,0 +1,40 @@
+{
+  "nav": {
+    "home": "首页",
+    "playground": "Playground",
+    "apiDocs": "API 文档",
+    "dashboard": "控制台",
+    "pricing": "定价",
+    "myCreations": "我的作品",
+    "generator": "视频生成",
+    "signIn": "登录",
+    "getStarted": "开始使用"
+  },
+  "hero": {
+    "badge": "2026 Seedance 2.0 发布",
+    "title": "Seedance 2.0",
+    "subtitle": "AI Video Generator",
+    "description": "文本转视频 · 图片转视频 · 专业级 1080p 输出 · 无需拍摄，无需剪辑软件",
+    "cta": "免费开始创作",
+    "learnMore": "了解更多"
+  },
+  "gallery": {
+    "title": "Seedance 2.0 AI 视频生成器作品集",
+    "description": "使用 Seedance 2.0 制作的真实视频 — 文生视频、图生视频、视频编辑等。悬停任意片段查看效果。",
+    "loadMore": "加载更多视频",
+    "loading": "加载中...",
+    "tags": {
+      "all": "全部",
+      "textToVideo": "文生视频",
+      "imageToVideo": "图生视频",
+      "nativeAudio": "原生音频",
+      "multiShot": "多镜头",
+      "videoEditing": "视频编辑",
+      "videoExtension": "视频扩展"
+    }
+  },
+  "common": {
+    "backToHome": "返回首页"
+  }
+}
+

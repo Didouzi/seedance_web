@@ -1,0 +1,40 @@
+{
+  "nav": {
+    "home": "Home",
+    "playground": "Playground",
+    "apiDocs": "API Docs",
+    "dashboard": "Dashboard",
+    "pricing": "Pricing",
+    "myCreations": "My Creations",
+    "generator": "Generator",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "badge": "2026 Seedance 2.0 Released",
+    "title": "Seedance 2.0",
+    "subtitle": "AI Video Generator",
+    "description": "Text to Video · Image to Video · Professional 1080p Output · No Filming, No Editing Software Required",
+    "cta": "Start Creating for Free",
+    "learnMore": "Learn More"
+  },
+  "gallery": {
+    "title": "Seedance 2.0 AI Video Generator Gallery",
+    "description": "Real videos made with Seedance 2.0 — text to video, image to video, video editing, and more. Hover any clip to see the results.",
+    "loadMore": "Load More Videos",
+    "loading": "Loading...",
+    "tags": {
+      "all": "All",
+      "textToVideo": "Text to Video",
+      "imageToVideo": "Image to Video",
+      "nativeAudio": "Native Audio",
+      "multiShot": "Multi-Shot",
+      "videoEditing": "Video Editing",
+      "videoExtension": "Video Extension"
+    }
+  },
+  "common": {
+    "backToHome": "Back to Home"
+  }
+}
+

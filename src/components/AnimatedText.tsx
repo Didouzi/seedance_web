@@ -45,7 +45,7 @@ export default function AnimatedText({
 
   const baseStyle = gradient
     ? {
-        background: "linear-gradient(90deg, #a78bfa, #60a5fa, #34d399, #60a5fa, #a78bfa)",
+        background: "linear-gradient(90deg, #60a5fa, #3b82f6, #06b6d4, #3b82f6, #60a5fa)",
         backgroundSize: "200% auto",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
@@ -63,7 +63,7 @@ export default function AnimatedText({
       >
         {displayText}
         {typewriter && showCursor && (
-          <span className="inline-block w-0.5 h-[0.9em] bg-purple-400 ml-1 animate-pulse" />
+          <span className="inline-block w-0.5 h-[0.9em] bg-blue-400 ml-1 animate-pulse" />
         )}
       </span>
 

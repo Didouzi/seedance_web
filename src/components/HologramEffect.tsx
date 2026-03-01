@@ -15,7 +15,7 @@ function generateFlickerDots() {
       id: i,
       left: `${rnd1 * 100}%`,
       top: `${rnd2 * 100}%`,
-      color: i % 2 === 0 ? "#a78bfa" : "#60a5fa",
+      color: i % 2 === 0 ? "#60a5fa" : "#06b6d4",
       duration: 2 + rnd3 * 3,
       delay: rnd1 * 2,
     };

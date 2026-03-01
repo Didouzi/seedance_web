@@ -6,9 +6,9 @@
   --bg-card: #12121f;
   --text-primary: #ffffff;
   --text-secondary: #a0a0b8;
-  --accent-purple: #7c3aed;
   --accent-blue: #3b82f6;
-  --accent-glow: rgba(124, 58, 237, 0.3);
+  --accent-cyan: #06b6d4;
+  --accent-glow: rgba(59, 130, 246, 0.3);
   --border-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -28,18 +28,18 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #a78bfa 50%, #60a5fa 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #60a5fa 50%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.gradient-purple-blue {
-  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+.gradient-blue-cyan {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
 }
 
-.glow-purple {
-  box-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
+.glow-blue {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
 }
 
 .glass-card {
@@ -49,8 +49,8 @@ body {
 }
 
 .hero-gradient {
-  background: radial-gradient(ellipse at top center, rgba(124, 58, 237, 0.15) 0%, transparent 60%),
-              radial-gradient(ellipse at bottom right, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+  background: radial-gradient(ellipse at top center, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at bottom right, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
               #0a0a0f;
 }
 
@@ -255,4 +255,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 浮动动画 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.3;
+  }
 }

@@ -99,10 +99,16 @@ export default function Features() {
   };
 
   return (
-    <section className="py-24 px-4" style={{ background: "#0a0a0f" }}>
-      <div className="max-w-7xl mx-auto">
+    <section className="py-24 px-4 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Tab Navigation */}
-        <div className="relative flex flex-wrap justify-center gap-2 mb-16" ref={tabsRef}>
+        <div className="relative flex flex-wrap justify-center gap-3 mb-16" ref={tabsRef}>
           {/* 滑动指示器 */}
           <div
             className="absolute bottom-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300 ease-out rounded-full"
@@ -116,8 +122,10 @@ export default function Features() {
             <button
               key={f.id}
               onClick={() => handleTabChange(i)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                active === i ? "tag-active scale-105" : "tag-inactive hover:scale-105"
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                active === i
+                  ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30 scale-105"
+                  : "bg-white/10 text-white border border-white/30 hover:bg-white/20 hover:scale-105 backdrop-blur-sm"
               }`}>
               {f.label}
             </button>
@@ -125,7 +133,13 @@ export default function Features() {
         </div>
 
         {/* Feature Card */}
-        <div className="glass-card rounded-3xl overflow-hidden group perspective-1000">
+        <div className="rounded-3xl overflow-hidden group perspective-1000"
+          style={{
+            background: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(24px)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+          }}>
           <div className="grid lg:grid-cols-2 gap-0">
             {/* Left: Info */}
             <div
@@ -134,16 +148,20 @@ export default function Features() {
               }`}
               key={`info-${active}`}>
               <div className="text-4xl mb-4 animate-bounce-in">{feat.icon}</div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">{feat.title}</h2>
-              <p className="text-white/60 text-lg mb-8 leading-relaxed">{feat.desc}</p>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 tracking-tight">{feat.title}</h2>
+              <p className="text-gray-600 text-lg mb-8 leading-relaxed font-medium">{feat.desc}</p>
 
               {/* Prompt preview */}
-              <div className="glass-card rounded-xl p-4 mb-8 hover:bg-white/5 transition-all duration-300">
-                <p className="text-xs text-white/40 uppercase tracking-wider mb-2">Prompt</p>
-                <p className="text-sm text-white/70 line-clamp-3">{feat.prompt}</p>
+              <div className="rounded-xl p-4 mb-8 transition-all duration-300"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.5)',
+                  border: '1px solid rgba(0, 0, 0, 0.05)'
+                }}>
+                <p className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-semibold">Prompt</p>
+                <p className="text-sm text-gray-700 line-clamp-3 font-medium">{feat.prompt}</p>
               </div>
 
-              <button className="btn-primary px-6 py-3 text-sm self-start hover:scale-105 transition-transform">
+              <button className="px-8 py-4 rounded-full text-base font-semibold bg-blue-500 text-white hover:bg-blue-600 hover:scale-105 transition-all shadow-lg shadow-blue-500/30 self-start">
                 {feat.cta} →
               </button>
             </div>
@@ -165,16 +183,15 @@ export default function Features() {
                   <source src={feat.videoSrc} type="video/mp4"/>
                 </video>
               ) : (
-                <div className="w-full h-full flex items-center justify-center"
-                  style={{ background: `radial-gradient(ellipse at center, ${feat.color}22 0%, transparent 70%), #0d0d1a` }}>
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
                   <div className="text-center">
                     <div className="text-8xl mb-4">{feat.icon}</div>
-                    <p className="text-white/40 text-sm">Video preview</p>
+                    <p className="text-gray-400 text-sm font-medium">Video preview</p>
                   </div>
                 </div>
               )}
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"/>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"/>
             </div>
           </div>
         </div>

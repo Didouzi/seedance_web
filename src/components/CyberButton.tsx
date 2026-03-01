@@ -36,13 +36,13 @@ export default function CyberButton({
   return (
     <button
       onClick={handleClick}
-      className="cyber-button group relative px-8 py-4 text-base font-semibold overflow-hidden"
+      className="cyber-button group relative px-10 py-5 text-lg font-bold overflow-hidden"
       style={{
         background: isPrimary
           ? "linear-gradient(135deg, rgba(124,58,237,0.9), rgba(109,40,217,0.9))"
           : "rgba(255,255,255,0.05)",
         border: isPrimary ? "2px solid rgba(167,139,250,0.5)" : "2px solid rgba(255,255,255,0.1)",
-        borderRadius: "12px",
+        borderRadius: "14px",
         color: "white",
         cursor: "pointer",
         transition: "all 0.3s ease",
