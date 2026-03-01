@@ -5,22 +5,26 @@ import { useTranslations } from "next-intl";
 const TAGS = ["All", "Text to Video", "Image to Video", "Native Audio", "Multi-Shot", "Video Editing", "Video Extension"];
 
 const GALLERY_ITEMS = [
-  { id: 1, tag: "Text to Video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", title: "Cosmic Portal Scene" },
-  { id: 2, tag: "Image to Video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", title: "Street Chase Animation" },
-  { id: 3, tag: "Native Audio", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", title: "Dynamic Scene with Audio" },
-  { id: 4, tag: "Multi-Shot", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", title: "Multi-Shot Sequence" },
-  { id: 5, tag: "Video Editing", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", title: "Edited Scene" },
-  { id: 6, tag: "Text to Video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4", title: "Cinematic Landscape" },
-  { id: 7, tag: "Video Extension", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", title: "Extended Scene" },
-  { id: 8, tag: "Multi-Shot", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4", title: "Epic Multi-Shot" },
-  { id: 9, tag: "Text to Video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4", title: "Action Scene" },
-  { id: 10, tag: "Image to Video", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4", title: "Sci-Fi Animation" },
-  { id: 11, tag: "Native Audio", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4", title: "Audio Enhanced" },
-  { id: 12, tag: "Video Editing", src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4", title: "Professional Edit" },
+  { id: 1, tag: "Text to Video", src: "https://cdn.seedance2.so/videos/seedance2-hero/20260208-1330/jimeng-2026-02-05-1958.mp4", title: "Cosmic Portal Scene" },
+  { id: 2, tag: "Image to Video", src: "https://cdn.seedance2.so/videos/seedance2-hero/20260208-1322/jimeng-2026-02-05-6539.mp4", title: "Street Chase Animation" },
+  { id: 3, tag: "Native Audio", src: "https://cdn.seedance2.so/videos/inspirations/img2vid/20260209-2336/video11.mp4", title: "Dynamic Scene with Audio" },
+  { id: 4, tag: "Multi-Shot", src: "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-15.mp4", title: "Multi-Shot Sequence" },
+  { id: 5, tag: "Video Editing", src: "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-16.mp4", title: "Edited Scene" },
+  { id: 6, tag: "Text to Video", src: "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-17.mp4", title: "Cinematic Landscape" },
+  { id: 7, tag: "Video Extension", src: "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-18.mp4", title: "Extended Scene" },
+  { id: 8, tag: "Multi-Shot", src: "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-19.mp4", title: "Epic Multi-Shot" },
+  { id: 9, tag: "Text to Video", src: "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-20.mp4", title: "Action Scene" },
+  { id: 10, tag: "Image to Video", src: "https://cdn.seedance2.so/videos/inspirations/img2vid/20260209-2336/video12.mp4", title: "Sci-Fi Animation" },
+  { id: 11, tag: "Native Audio", src: "https://cdn.seedance2.so/videos/inspirations/img2vid/20260209-2336/video13.mp4", title: "Audio Enhanced" },
+  { id: 12, tag: "Video Editing", src: "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-21.mp4", title: "Professional Edit" },
 ];
 
 function VideoCard({ item, index }: { item: typeof GALLERY_ITEMS[0]; index: number }) {
   const [isVisible, setIsVisible] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const videoRef = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // 交错淡入动画
@@ -28,8 +32,35 @@ function VideoCard({ item, index }: { item: typeof GALLERY_ITEMS[0]; index: numb
     return () => clearTimeout(timer);
   }, [index]);
 
+  useEffect(() => {
+    // Intersection Observer 懒加载
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoad(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: '200px' } // 提前200px开始加载
+    );
+
+    const currentRef = videoRef[0];
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
   return (
     <div
+      ref={(el) => { videoRef[0] = el; }}
       className={`relative rounded-2xl overflow-hidden group transition-all duration-500 hover:scale-[1.02] ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
@@ -41,14 +72,43 @@ function VideoCard({ item, index }: { item: typeof GALLERY_ITEMS[0]; index: numb
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
       }}>
       <div className="relative aspect-video bg-black/20">
-        <video
-          className="w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline>
-          <source src={item.src} type="video/mp4"/>
-        </video>
+        {/* 加载状态 */}
+        {shouldLoad && !videoLoaded && !videoError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50">
+            <svg className="animate-spin h-8 w-8 text-blue-500" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+            </svg>
+          </div>
+        )}
+
+        {/* 错误状态 */}
+        {videoError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50">
+            <div className="text-center">
+              <svg className="w-12 h-12 text-red-500 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-sm text-gray-400">视频加载失败</p>
+            </div>
+          </div>
+        )}
+
+        {shouldLoad && (
+          <video
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"
+            onLoadedData={() => setVideoLoaded(true)}
+            onError={() => setVideoError(true)}
+            style={{ opacity: videoLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect width='16' height='9' fill='%23111827'/%3E%3C/svg%3E">
+            <source src={item.src} type="video/mp4"/>
+          </video>
+        )}
 
         {/* 悬停遮罩 */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
