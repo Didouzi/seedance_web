@@ -4,7 +4,7 @@
     "playground": "Playground",
     "apiDocs": "API Docs",
     "dashboard": "Dashboard",
-    "pricing": "Pricing",
+    "contact": "Contact",
     "myCreations": "My Creations",
     "generator": "Generator",
     "signIn": "Sign In",
@@ -201,6 +201,166 @@
       "ownership": {
         "value": "100%",
         "label": "You Own It"
+      }
+    }
+  },
+  "contactPage": {
+    "backToHome": "Back to Home",
+    "title": "Contact Us",
+    "subtitle": "We're here to help",
+    "methods": {
+      "email": {
+        "title": "Email Support",
+        "desc": "Technical support and general inquiries"
+      },
+      "wechat": {
+        "title": "WeChat Support",
+        "desc": "Add us on WeChat for instant help"
+      },
+      "phone": {
+        "title": "Phone Support",
+        "desc": "Call during business hours for instant support"
+      },
+      "business": {
+        "title": "Business Inquiries",
+        "desc": "Enterprise partnerships and custom solutions"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "q": "What's the response time?",
+          "a": "We typically respond to emails within 24 hours. For urgent issues, please contact us via WeChat."
+        },
+        {
+          "q": "What languages do you support?",
+          "a": "We provide support in both Chinese and English."
+        },
+        {
+          "q": "How do I report a technical issue?",
+          "a": "Please email 1042808428@qq.com with a detailed description and screenshots of the issue."
+        }
+      ]
+    },
+    "hours": {
+      "title": "Business Hours",
+      "time": "Monday - Friday, 9:00 AM - 6:00 PM",
+      "timezone": "Beijing Time (UTC+8)"
+    }
+  },
+  "apiDocsPage": {
+    "backToHome": "Back to Home",
+    "title": "API Documentation",
+    "subtitle": "Complete reference for Seedance 2.0 API integration",
+    "tabs": {
+      "overview": "Overview",
+      "authentication": "Authentication",
+      "endpoints": "Endpoints",
+      "examples": "Examples"
+    },
+    "quickLinks": {
+      "title": "Quick Links",
+      "getApiKey": "Get API Key",
+      "rateLimits": "Rate Limits",
+      "statusPage": "Status Page",
+      "support": "Support"
+    },
+    "overview": {
+      "gettingStarted": "Getting Started",
+      "intro": "The Seedance 2.0 API allows you to generate high-quality AI videos programmatically. Our REST API is designed to be simple, powerful, and developer-friendly.",
+      "features": {
+        "fast": {
+          "title": "Fast",
+          "desc": "Average generation time ~60s"
+        },
+        "reliable": {
+          "title": "Reliable",
+          "desc": "99.9% uptime SLA"
+        },
+        "scalable": {
+          "title": "Scalable",
+          "desc": "From prototype to production"
+        }
+      },
+      "baseUrl": "Base URL",
+      "quickExample": "Quick Example"
+    },
+    "authentication": {
+      "title": "Authentication",
+      "intro": "All API requests require authentication using an API key. Include your API key in the Authorization header of each request.",
+      "gettingKey": "Getting Your API Key",
+      "steps": [
+        "Sign up for a Seedance account",
+        "Navigate to Dashboard → API Keys",
+        "Click \\\"Create New API Key\\\"",
+        "Copy and securely store your key"
+      ],
+      "headerFormat": "Header Format",
+      "security": {
+        "title": "Security Best Practices",
+        "items": [
+          "Never expose your API key in client-side code",
+          "Use environment variables to store keys",
+          "Rotate your API keys regularly",
+          "Use different keys for different environments"
+        ]
+      }
+    },
+    "endpoints": {
+      "title": "API Endpoints",
+      "generate": {
+        "title": "Generate Video",
+        "method": "POST",
+        "endpoint": "/generate",
+        "desc": "Create a new video from a text prompt or image.",
+        "requestBody": "Request Body",
+        "parameters": {
+          "apiKey": "Your API key",
+          "prompt": "Video description",
+          "model": "Model to use",
+          "duration": "Video duration in seconds",
+          "aspectRatio": "Aspect ratio",
+          "image": "Base64 image for image-to-video (optional)"
+        },
+        "response": "Response",
+        "responseFields": {
+          "id": "Video task ID",
+          "status": "Generation status",
+          "createdAt": "Creation timestamp"
+        }
+      },
+      "checkStatus": {
+        "title": "Check Video Status",
+        "method": "GET",
+        "endpoint": "/check-status",
+        "desc": "Check the status of a video generation task.",
+        "queryParams": "Query Parameters",
+        "parameters": {
+          "taskId": "Video task ID"
+        },
+        "response": "Response",
+        "responseFields": {
+          "status": "Current status (processing/completed/failed)",
+          "videoUrl": "Video URL (if completed)",
+          "progress": "Generation progress (0-100)"
+        }
+      }
+    },
+    "examples": {
+      "title": "Code Examples",
+      "curl": {
+        "generateComment": "# Generate a video",
+        "checkStatusComment": "# Check video status"
+      },
+      "python": {
+        "comment": "# Python example"
+      },
+      "javascript": {
+        "comment": "// JavaScript example"
+      },
+      "php": {
+        "comment": "// PHP example"
       }
     }
   },

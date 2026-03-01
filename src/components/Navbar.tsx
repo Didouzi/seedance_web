@@ -82,7 +82,7 @@ export default function Navbar() {
               <NavLink href={`/${locale}`} active={pathname === `/${locale}` || pathname === '/'}>{t('home')}</NavLink>
               <NavLink href={`/${locale}/generator`} active={pathname?.includes('/generator') || pathname?.includes('/dashboard')}>{t('generator')}</NavLink>
               <NavLink href={`/${locale}/api-docs`} active={pathname?.includes('/api-docs')}>{t('apiDocs')}</NavLink>
-              <NavLink href={`/${locale}/pricing`} active={pathname?.includes('/pricing')}>{t('pricing')}</NavLink>
+              <NavLink href={`/${locale}/contact`} active={pathname?.includes('/contact')}>{t('contact')}</NavLink>
             </div>
 
             {/* Right side */}
@@ -130,6 +130,8 @@ export default function Navbar() {
                       <button
                         onClick={() => {
                           setShowUserMenu(false);
+                          // 清除 localStorage 中的 API keys
+                          localStorage.removeItem('seedance_api_keys');
                           signOut({ callbackUrl: `/${locale}` });
                         }}
                         className="w-full text-left px-4 py-2 text-red-400 hover:bg-white/5 transition-colors"
@@ -209,7 +211,7 @@ export default function Navbar() {
             { label: t('home'), href: `/${locale}`, active: pathname === `/${locale}` || pathname === '/' },
             { label: t('generator'), href: `/${locale}/generator`, active: pathname?.includes('/generator') || pathname?.includes('/dashboard') },
             { label: t('apiDocs'), href: `/${locale}/api-docs`, active: pathname?.includes('/api-docs') },
-            { label: t('pricing'), href: `/${locale}/pricing`, active: pathname?.includes('/pricing') }
+            { label: t('contact'), href: `/${locale}/contact`, active: pathname?.includes('/contact') }
           ].map(item => (
             <Link key={item.label} href={item.href}
               className={`px-4 py-3.5 text-[15px] font-semibold rounded-[10px] transition-all duration-300 ${

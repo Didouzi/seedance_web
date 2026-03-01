@@ -1,16 +1,21 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 
 export default function ApiDocs() {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedLanguage, setSelectedLanguage] = useState("curl");
+  const t = useTranslations('apiDocsPage');
+  const params = useParams();
+  const locale = params.locale as string;
 
   const tabs = [
-    { id: "overview", label: "Overview" },
-    { id: "authentication", label: "Authentication" },
-    { id: "endpoints", label: "Endpoints" },
-    { id: "examples", label: "Examples" },
+    { id: "overview", label: t('tabs.overview') },
+    { id: "authentication", label: t('tabs.authentication') },
+    { id: "endpoints", label: t('tabs.endpoints') },
+    { id: "examples", label: t('tabs.examples') },
   ];
 
   const languages = ["curl", "python", "javascript", "php"];
@@ -19,20 +24,20 @@ export default function ApiDocs() {
     <div className="min-h-screen bg-[#0a0a0f] pt-24 pb-12">
       <div className="max-w-[1400px] mx-auto px-6">
         {/* Back Button */}
-        <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 group">
+        <Link href={`/${locale}`} className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 group">
           <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          <span className="text-sm font-medium">返回首页</span>
+          <span className="text-sm font-medium">{t('backToHome')}</span>
         </Link>
 
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-3">
-            API <span className="gradient-text">Documentation</span>
+            API <span className="gradient-text">{t('title')}</span>
           </h1>
           <p className="text-white/50 text-lg">
-            Complete reference for Seedance 2.0 API integration
+            {t('subtitle')}
           </p>
         </div>
 
@@ -58,20 +63,20 @@ export default function ApiDocs() {
 
               <div className="mt-6 pt-6 border-t border-white/10">
                 <h4 className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-3">
-                  Quick Links
+                  {t('quickLinks.title')}
                 </h4>
                 <div className="space-y-2">
                   <a href="#" className="block text-sm text-white/60 hover:text-blue-400 transition-colors">
-                    Get API Key
+                    {t('quickLinks.getApiKey')}
                   </a>
                   <a href="#" className="block text-sm text-white/60 hover:text-blue-400 transition-colors">
-                    Rate Limits
+                    {t('quickLinks.rateLimits')}
                   </a>
                   <a href="#" className="block text-sm text-white/60 hover:text-blue-400 transition-colors">
-                    Status Page
+                    {t('quickLinks.statusPage')}
                   </a>
                   <a href="#" className="block text-sm text-white/60 hover:text-blue-400 transition-colors">
-                    Support
+                    {t('quickLinks.support')}
                   </a>
                 </div>
               </div>
@@ -83,36 +88,35 @@ export default function ApiDocs() {
             {activeTab === "overview" && (
               <>
                 <div className="glass-card rounded-2xl p-8">
-                  <h2 className="text-2xl font-bold text-white mb-4">Getting Started</h2>
+                  <h2 className="text-2xl font-bold text-white mb-4">{t('overview.gettingStarted')}</h2>
                   <p className="text-white/70 mb-6">
-                    The Seedance 2.0 API allows you to generate high-quality AI videos programmatically.
-                    Our REST API is designed to be simple, powerful, and developer-friendly.
+                    {t('overview.intro')}
                   </p>
 
                   <div className="grid md:grid-cols-3 gap-4 mb-8">
                     <div className="bg-white/5 rounded-lg p-4 border border-white/10">
                       <div className="text-3xl mb-2">🚀</div>
-                      <h3 className="font-semibold text-white mb-2">Fast</h3>
-                      <p className="text-sm text-white/60">Average generation time ~60s</p>
+                      <h3 className="font-semibold text-white mb-2">{t('overview.features.fast.title')}</h3>
+                      <p className="text-sm text-white/60">{t('overview.features.fast.desc')}</p>
                     </div>
                     <div className="bg-white/5 rounded-lg p-4 border border-white/10">
                       <div className="text-3xl mb-2">🎯</div>
-                      <h3 className="font-semibold text-white mb-2">Reliable</h3>
-                      <p className="text-sm text-white/60">99.5% success rate</p>
+                      <h3 className="font-semibold text-white mb-2">{t('overview.features.reliable.title')}</h3>
+                      <p className="text-sm text-white/60">{t('overview.features.reliable.desc')}</p>
                     </div>
                     <div className="bg-white/5 rounded-lg p-4 border border-white/10">
                       <div className="text-3xl mb-2">📹</div>
-                      <h3 className="font-semibold text-white mb-2">Quality</h3>
-                      <p className="text-sm text-white/60">Professional 1080p output</p>
+                      <h3 className="font-semibold text-white mb-2">{t('overview.features.scalable.title')}</h3>
+                      <p className="text-sm text-white/60">{t('overview.features.scalable.desc')}</p>
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-semibold text-white mb-4">Base URL</h3>
+                  <h3 className="text-xl font-semibold text-white mb-4">{t('overview.baseUrl')}</h3>
                   <div className="bg-black/40 rounded-lg p-4 font-mono text-sm text-green-400 mb-6">
                     https://api.seedance.com/v1
                   </div>
 
-                  <h3 className="text-xl font-semibold text-white mb-4">Quick Example</h3>
+                  <h3 className="text-xl font-semibold text-white mb-4">{t('overview.quickExample')}</h3>
                   <div className="bg-black/40 rounded-lg p-4 font-mono text-xs text-green-400 overflow-x-auto">
                     <pre>{`curl -X POST https://api.seedance.com/v1/generate \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
@@ -129,21 +133,19 @@ export default function ApiDocs() {
 
             {activeTab === "authentication" && (
               <div className="glass-card rounded-2xl p-8">
-                <h2 className="text-2xl font-bold text-white mb-4">Authentication</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">{t('authentication.title')}</h2>
                 <p className="text-white/70 mb-6">
-                  All API requests require authentication using an API key. Include your API key in the
-                  Authorization header of each request.
+                  {t('authentication.intro')}
                 </p>
 
-                <h3 className="text-xl font-semibold text-white mb-4">Getting Your API Key</h3>
+                <h3 className="text-xl font-semibold text-white mb-4">{t('authentication.gettingKey')}</h3>
                 <ol className="list-decimal list-inside space-y-2 text-white/70 mb-6">
-                  <li>Sign up for a Seedance account</li>
-                  <li>Navigate to Dashboard → API Keys</li>
-                  <li>Click "Create New API Key"</li>
-                  <li>Copy and securely store your key</li>
+                  {t.raw('authentication.steps').map((step: string, index: number) => (
+                    <li key={index}>{step}</li>
+                  ))}
                 </ol>
 
-                <h3 className="text-xl font-semibold text-white mb-4">Using Your API Key</h3>
+                <h3 className="text-xl font-semibold text-white mb-4">{t('authentication.headerFormat')}</h3>
                 <div className="bg-black/40 rounded-lg p-4 font-mono text-xs text-green-400 overflow-x-auto mb-6">
                   <pre>{`Authorization: Bearer sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`}</pre>
                 </div>
@@ -152,11 +154,12 @@ export default function ApiDocs() {
                   <div className="flex gap-3">
                     <div className="text-yellow-500 text-xl">⚠️</div>
                     <div>
-                      <h4 className="font-semibold text-yellow-500 mb-1">Security Warning</h4>
-                      <p className="text-sm text-white/70">
-                        Never expose your API key in client-side code or public repositories.
-                        Always use environment variables and server-side requests.
-                      </p>
+                      <h4 className="font-semibold text-yellow-500 mb-1">{t('authentication.security.title')}</h4>
+                      <ul className="text-sm text-white/70 space-y-1 list-disc list-inside">
+                        {t.raw('authentication.security.items').map((item: string, index: number) => (
+                          <li key={index}>{item}</li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </div>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface ApiKey {
   id: string;
@@ -14,62 +15,99 @@ interface ApiKey {
 export default function ApiKeysPage() {
   const params = useParams();
   const locale = params.locale as string || 'en';
+  const { data: session, status } = useSession();
 
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [showNewKeyModal, setShowNewKeyModal] = useState(false);
   const [newKeyName, setNewKeyName] = useState("");
   const [newKeyValue, setNewKeyValue] = useState("");
   const [showKeys, setShowKeys] = useState<{ [key: string]: boolean }>({});
+  const [loading, setLoading] = useState(true);
 
-  // 从 localStorage 加载 API Keys
+  // 从数据库加载 API Keys
   useEffect(() => {
-    const savedKeys = localStorage.getItem('seedance_api_keys');
-    if (savedKeys) {
-      setApiKeys(JSON.parse(savedKeys));
+    if (status === 'authenticated') {
+      loadApiKeys();
+    } else if (status === 'unauthenticated') {
+      setLoading(false);
     }
-  }, []);
+  }, [status]);
 
-  // 保存 API Keys 到 localStorage
-  const saveKeys = (keys: ApiKey[]) => {
-    localStorage.setItem('seedance_api_keys', JSON.stringify(keys));
-    setApiKeys(keys);
+  // 加载 API Keys
+  const loadApiKeys = async () => {
+    try {
+      const response = await fetch('/api/api-keys');
+      if (response.ok) {
+        const data = await response.json();
+        setApiKeys(data.apiKeys);
+      }
+    } catch (error) {
+      console.error('Failed to load API keys:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 添加新 API Key
-  const handleAddKey = () => {
+  const handleAddKey = async () => {
     if (!newKeyName.trim() || !newKeyValue.trim()) return;
 
-    const newKey: ApiKey = {
-      id: Date.now().toString(),
-      name: newKeyName.trim(),
-      key: newKeyValue.trim(),
-      isDefault: apiKeys.length === 0, // 第一个密钥自动设为默认
-      createdAt: new Date().toISOString(),
-    };
+    try {
+      const response = await fetch('/api/api-keys', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: newKeyName.trim(),
+          key: newKeyValue.trim(),
+          isDefault: apiKeys.length === 0,
+        }),
+      });
 
-    saveKeys([...apiKeys, newKey]);
-    setNewKeyName("");
-    setNewKeyValue("");
-    setShowNewKeyModal(false);
+      if (response.ok) {
+        await loadApiKeys();
+        setNewKeyName("");
+        setNewKeyValue("");
+        setShowNewKeyModal(false);
+      }
+    } catch (error) {
+      console.error('Failed to add API key:', error);
+    }
   };
 
   // 删除 API Key
-  const handleDeleteKey = (id: string) => {
-    const updatedKeys = apiKeys.filter(k => k.id !== id);
-    // 如果删除的是默认密钥,将第一个密钥设为默认
-    if (apiKeys.find(k => k.id === id)?.isDefault && updatedKeys.length > 0) {
-      updatedKeys[0].isDefault = true;
+  const handleDeleteKey = async (id: string) => {
+    try {
+      const response = await fetch(`/api/api-keys?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        await loadApiKeys();
+      }
+    } catch (error) {
+      console.error('Failed to delete API key:', error);
     }
-    saveKeys(updatedKeys);
   };
 
   // 设置默认 API Key
-  const handleSetDefault = (id: string) => {
-    const updatedKeys = apiKeys.map(k => ({
-      ...k,
-      isDefault: k.id === id,
-    }));
-    saveKeys(updatedKeys);
+  const handleSetDefault = async (id: string) => {
+    try {
+      const response = await fetch('/api/api-keys', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (response.ok) {
+        await loadApiKeys();
+      }
+    } catch (error) {
+      console.error('Failed to set default API key:', error);
+    }
   };
 
   // 切换显示/隐藏密钥

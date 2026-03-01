@@ -74,46 +74,54 @@ export default function GeneratorPage() {
     { label: "Credits Remaining", value: "8,500", change: "-15%", trend: "down" },
   ];
 
-  // 从 localStorage 加载默认 API 密钥,从数据库加载历史记录
+  // 从数据库加载默认 API 密钥和历史记录
   useEffect(() => {
-    const savedKeys = localStorage.getItem('seedance_api_keys');
-    if (savedKeys) {
-      const keys = JSON.parse(savedKeys);
-      const defaultKey = keys.find((k: any) => k.isDefault);
-      if (defaultKey) {
-        setApiKey(defaultKey.key);
-      }
+    if (status === 'authenticated') {
+      loadApiKey();
+      loadHistory();
     }
+  }, [status]);
 
-    // 从数据库加载历史记录
-    const loadHistory = async () => {
-      if (status === 'authenticated') {
-        try {
-          const response = await fetch('/api/videos');
-          if (response.ok) {
-            const data = await response.json();
-            // 转换数据库格式到前端格式
-            const history: VideoHistory[] = data.videos.map((v: any) => ({
-              id: v.taskId,
-              prompt: v.prompt,
-              model: v.model,
-              status: v.status,
-              videoUrl: v.videoUrl,
-              thumbnailUrl: v.thumbnailUrl,
-              date: v.createdAt,
-              duration: v.duration || 5,
-              aspectRatio: v.aspectRatio || '16:9',
-            }));
-            setVideoHistory(history);
-          }
-        } catch (error) {
-          console.error('Failed to load video history:', error);
+  // 加载默认 API 密钥
+  const loadApiKey = async () => {
+    try {
+      const response = await fetch('/api/api-keys');
+      if (response.ok) {
+        const data = await response.json();
+        const defaultKey = data.apiKeys.find((k: any) => k.isDefault);
+        if (defaultKey) {
+          setApiKey(defaultKey.key);
         }
       }
-    };
+    } catch (error) {
+      console.error('Failed to load API key:', error);
+    }
+  };
 
-    loadHistory();
-  }, [status]);
+  // 从数据库加载历史记录
+  const loadHistory = async () => {
+    try {
+      const response = await fetch('/api/videos');
+      if (response.ok) {
+        const data = await response.json();
+        // 转换数据库格式到前端格式
+        const history: VideoHistory[] = data.videos.map((v: any) => ({
+          id: v.taskId,
+          prompt: v.prompt,
+          model: v.model,
+          status: v.status,
+          videoUrl: v.videoUrl,
+          thumbnailUrl: v.thumbnailUrl,
+          date: v.createdAt,
+          duration: v.duration || 5,
+          aspectRatio: v.aspectRatio || '16:9',
+        }));
+        setVideoHistory(history);
+      }
+    } catch (error) {
+      console.error('Failed to load video history:', error);
+    }
+  };
 
   // 保存历史记录到数据库
   const saveToHistory = async (video: VideoHistory) => {
@@ -367,6 +375,7 @@ export default function GeneratorPage() {
           motionIntensity,
           fps,
           quality,
+          image: uploadedImage, // 发送上传的图片(base64格式)
         }),
       });
 

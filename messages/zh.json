@@ -4,7 +4,7 @@
     "playground": "Playground",
     "apiDocs": "API 文档",
     "dashboard": "控制台",
-    "pricing": "定价",
+    "contact": "联系我们",
     "myCreations": "我的作品",
     "generator": "视频生成",
     "signIn": "登录",
@@ -201,6 +201,166 @@
       "ownership": {
         "value": "100%",
         "label": "您拥有它"
+      }
+    }
+  },
+  "contactPage": {
+    "backToHome": "返回首页",
+    "title": "联系我们",
+    "subtitle": "我们随时为您提供帮助",
+    "methods": {
+      "email": {
+        "title": "电子邮件支持",
+        "desc": "技术支持和一般咨询"
+      },
+      "wechat": {
+        "title": "微信客服",
+        "desc": "添加微信获取即时帮助"
+      },
+      "phone": {
+        "title": "电话咨询",
+        "desc": "工作时间内拨打获取即时支持"
+      },
+      "business": {
+        "title": "商务合作",
+        "desc": "企业合作和定制方案"
+      }
+    },
+    "faq": {
+      "title": "常见问题",
+      "items": [
+        {
+          "q": "响应时间是多久?",
+          "a": "我们通常在 24 小时内回复邮件。紧急问题请通过微信联系我们。"
+        },
+        {
+          "q": "支持哪些语言?",
+          "a": "我们提供中文和英文支持服务。"
+        },
+        {
+          "q": "如何报告技术问题?",
+          "a": "请发送邮件至 1042808428@qq.com,并详细描述问题和截图。"
+        }
+      ]
+    },
+    "hours": {
+      "title": "工作时间",
+      "time": "周一至周五 9:00 - 18:00",
+      "timezone": "北京时间 (UTC+8)"
+    }
+  },
+  "apiDocsPage": {
+    "backToHome": "返回首页",
+    "title": "API 文档",
+    "subtitle": "Seedance 2.0 API 集成完整参考",
+    "tabs": {
+      "overview": "概览",
+      "authentication": "身份验证",
+      "endpoints": "端点",
+      "examples": "示例"
+    },
+    "quickLinks": {
+      "title": "快速链接",
+      "getApiKey": "获取 API 密钥",
+      "rateLimits": "速率限制",
+      "statusPage": "状态页面",
+      "support": "支持"
+    },
+    "overview": {
+      "gettingStarted": "快速开始",
+      "intro": "Seedance 2.0 API 允许您以编程方式生成高质量的 AI 视频。我们的 REST API 设计简单、强大且对开发者友好。",
+      "features": {
+        "fast": {
+          "title": "快速",
+          "desc": "平均生成时间约 60 秒"
+        },
+        "reliable": {
+          "title": "可靠",
+          "desc": "99.9% 正常运行时间 SLA"
+        },
+        "scalable": {
+          "title": "可扩展",
+          "desc": "从原型到生产环境"
+        }
+      },
+      "baseUrl": "基础 URL",
+      "quickExample": "快速示例"
+    },
+    "authentication": {
+      "title": "身份验证",
+      "intro": "所有 API 请求都需要使用 API 密钥进行身份验证。在每个请求的 Authorization 标头中包含您的 API 密钥。",
+      "gettingKey": "获取您的 API 密钥",
+      "steps": [
+        "注册 Seedance 账户",
+        "导航到控制台 → API 密钥",
+        "点击 \"创建新 API 密钥\"",
+        "复制并安全存储您的密钥"
+      ],
+      "headerFormat": "标头格式",
+      "security": {
+        "title": "安全最佳实践",
+        "items": [
+          "切勿在客户端代码中暴露您的 API 密钥",
+          "使用环境变量存储密钥",
+          "定期轮换您的 API 密钥",
+          "为不同环境使用不同的密钥"
+        ]
+      }
+    },
+    "endpoints": {
+      "title": "API 端点",
+      "generate": {
+        "title": "生成视频",
+        "method": "POST",
+        "endpoint": "/generate",
+        "desc": "从文本提示或图像创建新视频。",
+        "requestBody": "请求体",
+        "parameters": {
+          "apiKey": "您的 API 密钥",
+          "prompt": "视频描述",
+          "model": "要使用的模型",
+          "duration": "视频时长(秒)",
+          "aspectRatio": "宽高比",
+          "image": "图生视频的 base64 图像(可选)"
+        },
+        "response": "响应",
+        "responseFields": {
+          "id": "视频任务 ID",
+          "status": "生成状态",
+          "createdAt": "创建时间戳"
+        }
+      },
+      "checkStatus": {
+        "title": "检查视频状态",
+        "method": "GET",
+        "endpoint": "/check-status",
+        "desc": "检查视频生成任务的状态。",
+        "queryParams": "查询参数",
+        "parameters": {
+          "taskId": "视频任务 ID"
+        },
+        "response": "响应",
+        "responseFields": {
+          "status": "当前状态(processing/completed/failed)",
+          "videoUrl": "视频 URL(如果已完成)",
+          "progress": "生成进度(0-100)"
+        }
+      }
+    },
+    "examples": {
+      "title": "代码示例",
+      "curl": {
+        "generateComment": "# 生成视频",
+        "checkStatusComment": "# 检查视频状态"
+      },
+      "python": {
+        "comment": "# Python 示例"
+      },
+      "javascript": {
+        "comment": "// JavaScript 示例"
+      },
+      "php": {
+        "comment": "// PHP 示例"
       }
     }
   },

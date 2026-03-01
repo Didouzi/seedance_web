@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     const userId = (session.user as any).id;
 
     const body = await request.json();
-    const { apiKey, prompt, model, duration, aspectRatio } = body;
+    const { apiKey, prompt, model, duration, aspectRatio, image } = body;
 
     // 验证 API 密钥
     if (!apiKey) {
@@ -87,6 +87,27 @@ export async function POST(request: NextRequest) {
       // 直接调用火山引擎 API
       console.log('[Volcano Engine] Generating video with model:', modelId);
 
+      // 构建 content 数组:图生视频需要 image_url,文生视频只需要 text
+      const content: any[] = [];
+
+      // 如果有图片,添加 image_url 对象
+      if (image) {
+        content.push({
+          type: 'image_url',
+          image_url: {
+            url: image, // base64 或 URL
+          },
+        });
+      }
+
+      // 添加文本提示词(图生视频和文生视频都需要)
+      if (prompt) {
+        content.push({
+          type: 'text',
+          text: prompt,
+        });
+      }
+
       const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/contents/generations/tasks', {
         method: 'POST',
         headers: {
@@ -95,12 +116,7 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           model: modelId,
-          content: [
-            {
-              type: 'text',
-              text: prompt,
-            },
-          ],
+          content,
           parameters: {
             duration: duration || 5,
             aspect_ratio: aspectRatio || '16:9',
