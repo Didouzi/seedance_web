@@ -74,7 +74,7 @@ export default function GeneratorPage() {
     { label: "Credits Remaining", value: "8,500", change: "-15%", trend: "down" },
   ];
 
-  // 从 localStorage 加载默认 API 密钥和历史记录
+  // 从 localStorage 加载默认 API 密钥,从数据库加载历史记录
   useEffect(() => {
     const savedKeys = localStorage.getItem('seedance_api_keys');
     if (savedKeys) {
@@ -85,20 +85,66 @@ export default function GeneratorPage() {
       }
     }
 
-    // 加载历史记录
-    const savedHistory = localStorage.getItem('seedance_video_history');
-    if (savedHistory) {
-      setVideoHistory(JSON.parse(savedHistory));
-    }
-  }, []);
+    // 从数据库加载历史记录
+    const loadHistory = async () => {
+      if (status === 'authenticated') {
+        try {
+          const response = await fetch('/api/videos');
+          if (response.ok) {
+            const data = await response.json();
+            // 转换数据库格式到前端格式
+            const history: VideoHistory[] = data.videos.map((v: any) => ({
+              id: v.taskId,
+              prompt: v.prompt,
+              model: v.model,
+              status: v.status,
+              videoUrl: v.videoUrl,
+              thumbnailUrl: v.thumbnailUrl,
+              date: v.createdAt,
+              duration: v.duration || 5,
+              aspectRatio: v.aspectRatio || '16:9',
+            }));
+            setVideoHistory(history);
+          }
+        } catch (error) {
+          console.error('Failed to load video history:', error);
+        }
+      }
+    };
 
-  // 保存历史记录到 localStorage
-  const saveToHistory = (video: VideoHistory) => {
+    loadHistory();
+  }, [status]);
+
+  // 保存历史记录到数据库
+  const saveToHistory = async (video: VideoHistory) => {
+    // 立即更新 UI
     setVideoHistory((prevHistory) => {
-      const newHistory = [video, ...prevHistory].slice(0, 10); // 只保留最近10个
-      localStorage.setItem('seedance_video_history', JSON.stringify(newHistory));
+      const newHistory = [video, ...prevHistory];
       return newHistory;
     });
+
+    // 保存到数据库
+    try {
+      await fetch('/api/videos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          taskId: video.id,
+          prompt: video.prompt,
+          model: video.model,
+          status: video.status,
+          videoUrl: video.videoUrl,
+          thumbnailUrl: video.thumbnailUrl,
+          duration: video.duration,
+          aspectRatio: video.aspectRatio,
+          completedAt: video.status === 'completed' ? new Date().toISOString() : null,
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to save video to database:', error);
+    }
   };
 
   // 清空所有参数

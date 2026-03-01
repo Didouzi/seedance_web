@@ -1,42 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import crypto from 'crypto';
-
-// 生成 API Key 的哈希值
-function hashApiKey(apiKey: string): string {
-  return crypto.createHash('sha256').update(apiKey).digest('hex');
-}
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 // GET - 获取用户的视频列表
 export async function GET(request: NextRequest) {
   try {
-    // TODO: 需要用户认证后启用
-    // 暂时返回空数组
-    return NextResponse.json({ videos: [] });
+    const session = await getServerSession(authOptions);
 
-    /*
-    const { searchParams } = new URL(request.url);
-    const apiKey = searchParams.get('apiKey');
-
-    if (!apiKey) {
+    if (!session?.user) {
       return NextResponse.json(
-        { error: 'API key is required' },
-        { status: 400 }
+        { error: '请先登录' },
+        { status: 401 }
       );
     }
+
+    const userId = (session.user as any).id;
 
     // 获取该用户的所有视频,按创建时间倒序
     const videos = await prisma.video.findMany({
       where: {
-        userId: 'temp-user-id', // 需要从 session 获取
+        userId,
       },
       orderBy: {
         createdAt: 'desc',
       },
+      take: 50, // 最多返回 50 条
     });
 
     return NextResponse.json({ videos });
-    */
   } catch (error) {
     console.error('Get videos error:', error);
     return NextResponse.json(
@@ -46,14 +38,19 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - 保存新的视频记录
+// POST - 保存/更新视频记录
 export async function POST(request: NextRequest) {
   try {
-    // TODO: 需要用户认证后启用
-    // 暂时返回成功
-    return NextResponse.json({ success: true });
+    const session = await getServerSession(authOptions);
 
-    /*
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: '请先登录' },
+        { status: 401 }
+      );
+    }
+
+    const userId = (session.user as any).id;
     const body = await request.json();
     const {
       taskId,
@@ -87,7 +84,7 @@ export async function POST(request: NextRequest) {
       },
       create: {
         taskId,
-        userId: 'temp-user-id', // 需要从 session 获取
+        userId,
         prompt,
         model,
         videoUrl,
@@ -100,7 +97,6 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ video });
-    */
   } catch (error) {
     console.error('Save video error:', error);
     return NextResponse.json(
@@ -113,7 +109,43 @@ export async function POST(request: NextRequest) {
 // DELETE - 删除视频记录
 export async function DELETE(request: NextRequest) {
   try {
-    // TODO: 需要用户认证后启用
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: '请先登录' },
+        { status: 401 }
+      );
+    }
+
+    const userId = (session.user as any).id;
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // 验证视频属于该用户
+    const video = await prisma.video.findUnique({
+      where: { id },
+    });
+
+    if (!video || video.userId !== userId) {
+      return NextResponse.json(
+        { error: 'Video not found or unauthorized' },
+        { status: 404 }
+      );
+    }
+
+    // 删除视频记录
+    await prisma.video.delete({
+      where: { id },
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Delete video error:', error);

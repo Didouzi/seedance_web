@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import crypto from 'crypto';
-
-// 生成 API Key 的哈希值
-function hashApiKey(apiKey: string): string {
-  return crypto.createHash('sha256').update(apiKey).digest('hex');
-}
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -70,37 +66,40 @@ export async function POST(request: NextRequest) {
     const thumbnailUrl = data.content?.thumbnail_url || data.thumbnail_url || null;
     const completedAt = data.status === 'succeeded' ? new Date() : null;
 
-    // TODO: 更新数据库中的视频状态 (需要用户认证后启用)
-    // 暂时注释掉,等待用户认证系统完成
-    /*
+    // 更新数据库中的视频状态
     try {
-      const apiKeyHash = hashApiKey(apiKey);
-      await prisma.video.upsert({
-        where: {
-          taskId: videoId,
-        },
-        update: {
-          status: data.status,
-          videoUrl: videoUrl,
-          thumbnailUrl: thumbnailUrl,
-          completedAt: completedAt,
-        },
-        create: {
-          taskId: videoId,
-          userId: 'temp-user-id', // 需要从 session 获取
-          prompt: 'Unknown',
-          model: data.model || 'unknown',
-          status: data.status,
-          videoUrl: videoUrl,
-          thumbnailUrl: thumbnailUrl,
-          completedAt: completedAt,
-        },
-      });
-      console.log('[Database] Video status updated:', videoId);
+      const session = await getServerSession(authOptions);
+
+      if (session?.user) {
+        const userId = (session.user as any).id;
+
+        await prisma.video.upsert({
+          where: {
+            taskId: videoId,
+          },
+          update: {
+            status: data.status,
+            videoUrl: videoUrl,
+            thumbnailUrl: thumbnailUrl,
+            completedAt: completedAt,
+          },
+          create: {
+            taskId: videoId,
+            userId,
+            prompt: 'Unknown',
+            model: data.model || 'unknown',
+            status: data.status,
+            videoUrl: videoUrl,
+            thumbnailUrl: thumbnailUrl,
+            completedAt: completedAt,
+          },
+        });
+        console.log('[Database] Video status updated:', videoId);
+      }
     } catch (dbError) {
       console.error('[Database] Failed to update video status:', dbError);
+      // 数据库错误不影响返回结果
     }
-    */
 
     return NextResponse.json(data);
   } catch (error) {

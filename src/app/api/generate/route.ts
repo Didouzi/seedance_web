@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createNewAPIClient } from '@/lib/newapi';
 import { prisma } from '@/lib/prisma';
-import crypto from 'crypto';
-
-// 生成 API Key 的哈希值
-function hashApiKey(apiKey: string): string {
-  return crypto.createHash('sha256').update(apiKey).digest('hex');
-}
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 // 模型名称到 ID 的映射
 const modelIdMap: Record<string, string> = {
@@ -19,8 +15,20 @@ const USE_NEWAPI = process.env.USE_NEWAPI === 'true';
 
 export async function POST(request: NextRequest) {
   try {
+    // 获取用户 session
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: '请先登录' },
+        { status: 401 }
+      );
+    }
+
+    const userId = (session.user as any).id;
+
     const body = await request.json();
-    const { apiKey, prompt, model, duration, aspectRatio, cameraMovement, motionIntensity, fps, quality } = body;
+    const { apiKey, prompt, model, duration, aspectRatio } = body;
 
     // 验证 API 密钥
     if (!apiKey) {
@@ -113,14 +121,12 @@ export async function POST(request: NextRequest) {
       console.log('[Volcano Engine] Generation result:', data);
     }
 
-    // TODO: 保存到数据库 (需要用户认证后启用)
-    // 暂时注释掉,等待用户认证系统完成
-    /*
+    // 保存到数据库
     try {
       await prisma.video.create({
         data: {
           taskId: data.id,
-          userId: 'temp-user-id', // 需要从 session 获取
+          userId,
           prompt,
           model: modelId,
           status: data.status || 'processing',
@@ -131,8 +137,8 @@ export async function POST(request: NextRequest) {
       console.log('[Database] Video record saved:', data.id);
     } catch (dbError) {
       console.error('[Database] Failed to save video record:', dbError);
+      // 数据库错误不影响返回结果
     }
-    */
 
     return NextResponse.json(data);
   } catch (error) {
