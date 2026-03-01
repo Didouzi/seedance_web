@@ -122,20 +122,21 @@ export default function Features() {
               }`}
               key={`info-${active}`}>
               <div className="text-4xl mb-4 animate-bounce-in">{feat.icon}</div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 tracking-tight">{feat.title}</h2>
-              <p className="text-gray-600 text-lg mb-8 leading-relaxed font-medium">{feat.desc}</p>
+              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 tracking-tight drop-shadow-lg">{feat.title}</h2>
+              <p className="text-gray-300 text-lg mb-8 leading-relaxed font-medium">{feat.desc}</p>
 
               {/* Prompt preview */}
               <div className="rounded-xl p-4 mb-8 transition-all duration-300"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.5)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
                 }}>
-                <p className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-semibold">{t('promptLabel')}</p>
-                <p className="text-sm text-gray-700 line-clamp-3 font-medium">{feat.prompt}</p>
+                <p className="text-xs text-blue-300 uppercase tracking-wider mb-2 font-semibold">{t('promptLabel')}</p>
+                <p className="text-sm text-gray-200 line-clamp-3 font-medium leading-relaxed">{feat.prompt}</p>
               </div>
 
-              <button className="px-8 py-4 rounded-full text-base font-semibold bg-blue-500 text-white hover:bg-blue-600 hover:scale-105 transition-all shadow-lg shadow-blue-500/30 self-start">
+              <button className="px-8 py-4 rounded-full text-base font-semibold bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 hover:scale-105 transition-all shadow-lg shadow-blue-500/30 self-start">
                 {feat.cta} →
               </button>
             </div>
