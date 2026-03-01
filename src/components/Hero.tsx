@@ -5,11 +5,20 @@ import { useTranslations } from "next-intl";
 
 const MODELS = ["Seedance", "Sora 2", "Veo 3", "Kling V3", "More"];
 
-// AI 视频背景列表
+// AI 视频背景列表 - 使用 Gallery 中的视频
 const AI_VIDEOS = [
-  "/videos/854323-hd_1920_1080_25fps.mp4",
-  "/videos/8327791-uhd_3840_2160_25fps.mp4",
-  "/videos/8328049-uhd_3840_2160_25fps.mp4",
+  "https://cdn.seedance2.so/videos/seedance2-hero/20260208-1330/jimeng-2026-02-05-1958.mp4",
+  "https://cdn.seedance2.so/videos/seedance2-hero/20260208-1322/jimeng-2026-02-05-6539.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/img2vid/20260209-2336/video11.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-15.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-16.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-17.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-18.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-19.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-20.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/img2vid/20260209-2336/video12.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/img2vid/20260209-2336/video13.mp4",
+  "https://cdn.seedance2.so/videos/inspirations/awesome-prompts/20260215-1055/prompt-21.mp4",
 ];
 
 export default function Hero() {
@@ -28,15 +37,11 @@ export default function Hero() {
     setMounted(true);
   }, []);
 
-  // 视频切换定时器
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentVideoIndex((prev) => (prev + 1) % AI_VIDEOS.length);
-      setVideoLoaded(false);
-    }, 30000);
-
-    return () => clearInterval(timer);
-  }, []);
+  // 视频播放结束时切换到下一个
+  const handleVideoEnded = () => {
+    setCurrentVideoIndex((prev) => (prev + 1) % AI_VIDEOS.length);
+    setVideoLoaded(false);
+  };
 
   // 视频加载成功
   const handleVideoLoaded = () => {
@@ -74,11 +79,11 @@ export default function Hero() {
             className="absolute inset-0 w-full h-full object-cover"
             autoPlay
             muted
-            loop
             playsInline
             preload="metadata"
             onLoadedData={handleVideoLoaded}
             onError={handleVideoError}
+            onEnded={handleVideoEnded}
             style={{
               opacity: videoLoaded ? 0.5 : 0,
               transition: 'opacity 1s ease-in-out',
