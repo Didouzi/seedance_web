@@ -61,6 +61,19 @@ export async function POST(request: NextRequest) {
 
     console.log('[Volcano Engine] Status result:', data);
 
+    // 火山引擎状态映射
+    // running -> processing
+    // succeeded -> completed
+    // failed -> failed
+    const statusMap: Record<string, string> = {
+      'running': 'processing',
+      'succeeded': 'completed',
+      'failed': 'failed',
+    };
+
+    const mappedStatus = statusMap[data.status] || data.status;
+    console.log('[Status Mapping] Original:', data.status, '→ Mapped:', mappedStatus);
+
     // 提取视频 URL (火山引擎返回的格式是 data.content.video_url)
     const videoUrl = data.content?.video_url || data.video_url || null;
     const thumbnailUrl = data.content?.thumbnail_url || data.thumbnail_url || null;
@@ -78,7 +91,7 @@ export async function POST(request: NextRequest) {
             taskId: videoId,
           },
           update: {
-            status: data.status,
+            status: mappedStatus,
             videoUrl: videoUrl,
             thumbnailUrl: thumbnailUrl,
             completedAt: completedAt,
@@ -88,7 +101,7 @@ export async function POST(request: NextRequest) {
             userId,
             prompt: 'Unknown',
             model: data.model || 'unknown',
-            status: data.status,
+            status: mappedStatus,
             videoUrl: videoUrl,
             thumbnailUrl: thumbnailUrl,
             completedAt: completedAt,
@@ -101,7 +114,11 @@ export async function POST(request: NextRequest) {
       // 数据库错误不影响返回结果
     }
 
-    return NextResponse.json(data);
+    // 返回映射后的状态
+    return NextResponse.json({
+      ...data,
+      status: mappedStatus,
+    });
   } catch (error) {
     console.error('Check status API error:', error);
     return NextResponse.json(

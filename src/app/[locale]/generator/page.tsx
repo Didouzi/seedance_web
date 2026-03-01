@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 
 interface VideoStatus {
   id: string;
-  status: 'processing' | 'completed' | 'failed';
+  status: 'processing' | 'completed' | 'failed' | 'running';
   video_url?: string;
   thumbnail_url?: string;
   error?: string;
@@ -17,7 +17,7 @@ interface VideoHistory {
   id: string;
   prompt: string;
   model: string;
-  status: 'completed' | 'processing' | 'failed';
+  status: 'completed' | 'processing' | 'failed' | 'running';
   videoUrl?: string;
   thumbnailUrl?: string;
   date: string;
@@ -200,6 +200,33 @@ export default function GeneratorPage() {
     }
   };
 
+  // 从数据库重新加载历史记录
+  const reloadHistory = async () => {
+    if (status === 'authenticated') {
+      try {
+        const response = await fetch('/api/videos');
+        if (response.ok) {
+          const data = await response.json();
+          const history: VideoHistory[] = data.videos.map((v: any) => ({
+            id: v.taskId,
+            prompt: v.prompt,
+            model: v.model,
+            status: v.status,
+            videoUrl: v.videoUrl,
+            thumbnailUrl: v.thumbnailUrl,
+            date: v.createdAt,
+            duration: v.duration || 5,
+            aspectRatio: v.aspectRatio || '16:9',
+          }));
+          setVideoHistory(history);
+          console.log('[Frontend] History reloaded, total videos:', history.length);
+        }
+      } catch (error) {
+        console.error('Failed to reload video history:', error);
+      }
+    }
+  };
+
   // 检查视频状态
   const checkVideoStatus = async (id: string) => {
     try {
@@ -215,6 +242,8 @@ export default function GeneratorPage() {
       });
 
       const data: VideoStatus = await response.json();
+
+      console.log('[Frontend] Received status:', data.status, 'for video:', id);
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to check status');
@@ -257,6 +286,9 @@ export default function GeneratorPage() {
             completedAt: new Date().toISOString(),
           }),
         });
+
+        // 重新加载历史记录以确保UI更新
+        await reloadHistory();
       } else if (data.status === 'failed') {
         setError(data.error || 'Video generation failed');
         setGenerating(false);
@@ -277,11 +309,17 @@ export default function GeneratorPage() {
             aspectRatio,
           }),
         });
-      } else if (data.status === 'processing') {
+
+        // 重新加载历史记录
+        await reloadHistory();
+      } else if (data.status === 'processing' || data.status === 'running') {
         setProgress(data.progress || 50);
         // 继续轮询
         setTimeout(() => checkVideoStatus(id), 3000);
       }
+
+      // 无论什么状态,都重新加载一次历史记录
+      await reloadHistory();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to check status');
       setGenerating(false);
@@ -887,8 +925,7 @@ export default function GeneratorPage() {
                   {videoHistory.map((video) => (
                     <div
                       key={video.id}
-                      className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-colors cursor-pointer group"
-                      onClick={() => setPrompt(video.prompt)}
+                      className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-colors group"
                     >
                       <div className="flex items-start gap-3">
                         {/* Thumbnail */}
@@ -896,7 +933,13 @@ export default function GeneratorPage() {
                           <img
                             src={video.thumbnailUrl}
                             alt="Video thumbnail"
-                            className="w-16 h-16 rounded object-cover flex-shrink-0"
+                            className="w-16 h-16 rounded object-cover flex-shrink-0 cursor-pointer"
+                            onClick={() => {
+                              if (video.videoUrl) {
+                                setVideoUrl(video.videoUrl);
+                                setPrompt(video.prompt);
+                              }
+                            }}
                           />
                         )}
 
@@ -906,22 +949,51 @@ export default function GeneratorPage() {
                             <span className={`px-2 py-1 rounded text-xs font-semibold ${
                               video.status === "completed"
                                 ? "bg-green-100 text-green-700"
-                                : video.status === "processing"
+                                : video.status === "processing" || video.status === "running"
                                 ? "bg-yellow-100 text-yellow-700"
                                 : "bg-red-100 text-red-700"
                             }`}>
                               {video.status}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-900 font-medium mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                          <p
+                            className="text-sm text-gray-900 font-medium mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors cursor-pointer"
+                            onClick={() => setPrompt(video.prompt)}
+                          >
                             {video.prompt}
                           </p>
-                          <div className="flex items-center gap-3 text-xs text-gray-500">
-                            <span>{new Date(video.date).toLocaleString()}</span>
-                            <span>•</span>
-                            <span>{video.duration}s</span>
-                            <span>•</span>
-                            <span>{video.aspectRatio}</span>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 text-xs text-gray-500">
+                              <span>{new Date(video.date).toLocaleString()}</span>
+                              <span>•</span>
+                              <span>{video.duration}s</span>
+                              <span>•</span>
+                              <span>{video.aspectRatio}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {video.videoUrl && video.status === 'completed' && (
+                                <button
+                                  onClick={() => {
+                                    setVideoUrl(video.videoUrl!);
+                                    setPrompt(video.prompt);
+                                  }}
+                                  className="text-xs text-blue-600 hover:text-blue-700 font-semibold"
+                                >
+                                  查看视频
+                                </button>
+                              )}
+                              {(video.status === 'processing' || video.status === 'running') && (
+                                <button
+                                  onClick={async () => {
+                                    console.log('[Manual Check] Checking status for:', video.id);
+                                    await checkVideoStatus(video.id);
+                                  }}
+                                  className="text-xs text-yellow-600 hover:text-yellow-700 font-semibold"
+                                >
+                                  刷新状态
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>

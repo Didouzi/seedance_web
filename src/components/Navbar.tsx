@@ -51,7 +51,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-[68px]">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group relative">
+            <Link href={`/${locale}`} className="flex items-center gap-3 group relative">
               <div className="relative">
                 {/* Glow ring */}
                 <div className="absolute inset-0 rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -79,10 +79,10 @@ export default function Navbar() {
 
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-1">
-              <NavLink href="/" active={pathname === '/en' || pathname === '/zh'}>{t('home')}</NavLink>
-              <NavLink href="/generator" active={pathname?.includes('/generator') || pathname?.includes('/dashboard')}>{t('generator')}</NavLink>
-              <NavLink href="/api-docs" active={pathname?.includes('/api-docs')}>{t('apiDocs')}</NavLink>
-              <NavLink href="/pricing" active={pathname?.includes('/pricing')}>{t('pricing')}</NavLink>
+              <NavLink href={`/${locale}`} active={pathname === `/${locale}` || pathname === '/'}>{t('home')}</NavLink>
+              <NavLink href={`/${locale}/generator`} active={pathname?.includes('/generator') || pathname?.includes('/dashboard')}>{t('generator')}</NavLink>
+              <NavLink href={`/${locale}/api-docs`} active={pathname?.includes('/api-docs')}>{t('apiDocs')}</NavLink>
+              <NavLink href={`/${locale}/pricing`} active={pathname?.includes('/pricing')}>{t('pricing')}</NavLink>
             </div>
 
             {/* Right side */}
@@ -206,10 +206,10 @@ export default function Navbar() {
         }}>
         <div className="max-w-[1400px] mx-auto px-6 py-5 flex flex-col gap-1.5">
           {[
-            { label: t('home'), href: "/", active: pathname === '/en' || pathname === '/zh' },
-            { label: t('generator'), href: "/generator", active: pathname?.includes('/generator') || pathname?.includes('/dashboard') },
-            { label: t('apiDocs'), href: "/api-docs", active: pathname?.includes('/api-docs') },
-            { label: t('pricing'), href: "/pricing", active: pathname?.includes('/pricing') }
+            { label: t('home'), href: `/${locale}`, active: pathname === `/${locale}` || pathname === '/' },
+            { label: t('generator'), href: `/${locale}/generator`, active: pathname?.includes('/generator') || pathname?.includes('/dashboard') },
+            { label: t('apiDocs'), href: `/${locale}/api-docs`, active: pathname?.includes('/api-docs') },
+            { label: t('pricing'), href: `/${locale}/pricing`, active: pathname?.includes('/pricing') }
           ].map(item => (
             <Link key={item.label} href={item.href}
               className={`px-4 py-3.5 text-[15px] font-semibold rounded-[10px] transition-all duration-300 ${

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 const MODELS = ["Seedance", "Sora 2", "Veo 3", "Kling V3", "More"];
@@ -15,6 +15,8 @@ const AI_VIDEOS = [
 export default function Hero() {
   const t = useTranslations('hero');
   const router = useRouter();
+  const params = useParams();
+  const locale = (params.locale as string) || 'zh';
   const [activeModel, setActiveModel] = useState("Seedance");
   const [mounted, setMounted] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -113,7 +115,7 @@ export default function Hero() {
         {/* CTA Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
           <button
-            onClick={() => router.push('/generator')}
+            onClick={() => router.push(`/${locale}/generator`)}
             className="btn-primary px-8 py-4 text-lg flex items-center gap-2">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="2" y="2" width="20" height="20" rx="3"/>

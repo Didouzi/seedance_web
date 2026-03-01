@@ -1,82 +1,56 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
-const FEATURES = [
+const FEATURES_CONFIG = [
   {
-    id: "text-to-video",
-    label: "Text to Video",
-    title: "Text to Video AI",
-    desc: "Type a scene, get a video. Turn your words into 1080p footage with synchronized audio. No filming required.",
-    cta: "Try Seedance 2.0",
+    id: "textToVideo",
     icon: "✍️",
-    prompt: "A father and his young son stand together on a circular stone platform before a massive ancient portal gateway. The portal glows with swirling bright blue cosmic energy. Cinematic wide shot, dramatic blue lighting, sci-fi fantasy atmosphere.",
     videoSrc: "https://cdn.seedance2.so/videos/seedance2-hero/20260208-1330/jimeng-2026-02-05-1958.mp4",
     color: "#7c3aed",
   },
   {
-    id: "image-to-video",
-    label: "Image to Video",
-    title: "Image to Video AI",
-    desc: "Drop in a photo, Seedance 2.0 does the rest. Animate any still image with natural motion and synchronized sound.",
-    cta: "Try Image to Video",
+    id: "imageToVideo",
     icon: "🖼️",
-    prompt: "The camera follows a man in black sprinting through the streets. A crowd chases behind him. Chaotic shouts echo from the crowd.",
     videoSrc: "https://cdn.seedance2.so/videos/seedance2-hero/20260208-1322/jimeng-2026-02-05-6539.mp4",
     color: "#3b82f6",
   },
   {
     id: "reference",
-    label: "Reference to Video",
-    title: "Reference to Video AI",
-    desc: "Give Seedance 2.0 your reference images or clips and it builds new video around them. AI video generation with style and motion you actually control.",
-    cta: "Try Reference to Video",
     icon: "🎯",
-    prompt: "Use the female star from @Image1 as the main subject, reference the camera movements from @Video1. The star's dance moves also reference the woman's dance, performing energetically on stage.",
     videoSrc: "",
     color: "#06b6d4",
   },
   {
     id: "extension",
-    label: "Video Extension",
-    title: "AI Video Extension",
-    desc: "Need a longer clip? Seedance 2.0 picks up where your footage ends and keeps the look consistent.",
-    cta: "Try Video Extension",
     icon: "⏩",
-    prompt: "Extend 15 seconds. A donkey rides a motorcycle through a surreal advertisement world, referencing the character design from the provided images.",
     videoSrc: "",
     color: "#f59e0b",
   },
   {
     id: "editing",
-    label: "Video Editing",
-    title: "AI Video Editing",
-    desc: "Swap characters, rewrite the plot, add objects mid-scene. Change existing footage without starting over.",
-    cta: "Try Video Editing",
     icon: "✂️",
-    prompt: "Rewrite the entire plot: A suited man sits at a bar, calm expression, gently swirling his glass. He suddenly pulls out an oversized snack gift pack from under the table.",
     videoSrc: "",
     color: "#ec4899",
-  },
-  {
-    id: "beat-sync",
-    label: "Beat Sync",
-    title: "Beat Sync Video",
-    desc: "Feed Seedance 2.0 your images and a rhythm track. The AI cuts and transitions on beat, automatically.",
-    cta: "Try Beat Sync",
-    icon: "🎵",
-    prompt: "The girl from the poster keeps changing outfits, with clothing styles referencing @Image1 and @Image2. Video rhythm follows @Video.",
-    videoSrc: "",
-    color: "#10b981",
   },
 ];
 
 export default function Features() {
+  const t = useTranslations('features');
   const [active, setActive] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const tabsRef = useRef<HTMLDivElement>(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
-  const feat = FEATURES[active];
+  const config = FEATURES_CONFIG[active];
+  const feat = {
+    ...config,
+    label: t(`${config.id}.label`),
+    title: t(`${config.id}.title`),
+    desc: t(`${config.id}.desc`),
+    cta: t(`${config.id}.cta`),
+    prompt: t(`${config.id}.prompt`),
+  };
 
   // 更新滑动指示器位置
   useEffect(() => {
@@ -118,7 +92,7 @@ export default function Features() {
               transform: 'translateY(100%)',
             }}
           />
-          {FEATURES.map((f, i) => (
+          {FEATURES_CONFIG.map((f, i) => (
             <button
               key={f.id}
               onClick={() => handleTabChange(i)}
@@ -127,7 +101,7 @@ export default function Features() {
                   ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30 scale-105"
                   : "bg-white/10 text-white border border-white/30 hover:bg-white/20 hover:scale-105 backdrop-blur-sm"
               }`}>
-              {f.label}
+              {t(`${f.id}.label`)}
             </button>
           ))}
         </div>
@@ -157,7 +131,7 @@ export default function Features() {
                   background: 'rgba(255, 255, 255, 0.5)',
                   border: '1px solid rgba(0, 0, 0, 0.05)'
                 }}>
-                <p className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-semibold">Prompt</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider mb-2 font-semibold">{t('promptLabel')}</p>
                 <p className="text-sm text-gray-700 line-clamp-3 font-medium">{feat.prompt}</p>
               </div>
 

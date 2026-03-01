@@ -1,40 +1,6 @@
 "use client";
 import { useState } from "react";
-
-const FAQS = [
-  {
-    q: "What makes Seedance 2.0 different from other AI video generators?",
-    a: "Native audio. Tools like Runway and Sora generate silent video. Seedance 2.0 creates synchronized dialogue, sound effects, and music in one step. It also supports multi-shot storytelling with character consistency across scenes.",
-  },
-  {
-    q: "How long does Seedance 2.0 take to generate a video?",
-    a: "Most videos are ready in 30 to 60 seconds. Video, audio, and transitions are processed simultaneously, so there is no separate audio syncing step.",
-  },
-  {
-    q: "What resolution does Seedance 2.0 output?",
-    a: "1080p. Sharp enough for YouTube, TikTok, Instagram, and professional presentations.",
-  },
-  {
-    q: "Can I use images as input for Seedance 2.0?",
-    a: "Yes. Seedance 2.0 supports both text-to-video and image-to-video. You can upload up to 12 references per project — images, video clips, and audio to guide the output.",
-  },
-  {
-    q: "Is Seedance 2.0 free to use?",
-    a: "Yes. Start for free, no credit card required. The free tier includes standard quality output. Upgrade for 1080p resolution, longer videos, and priority generation.",
-  },
-  {
-    q: "Do characters stay consistent in Seedance 2.0 videos?",
-    a: "Yes. Same face, clothing, and style across every frame and scene. No character drift, even in multi-shot sequences.",
-  },
-  {
-    q: "What output formats does Seedance 2.0 support?",
-    a: "MP4 and WebM. Compatible with all major platforms and editing software.",
-  },
-  {
-    q: "Who owns the videos I create with Seedance 2.0?",
-    a: "You do. Full commercial rights, no attribution required.",
-  },
-];
+import { useTranslations } from "next-intl";
 
 function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false);
@@ -86,6 +52,9 @@ function FAQItem({ q, a, index }: { q: string; a: string; index: number }) {
 }
 
 export default function FAQ() {
+  const t = useTranslations('faq');
+  const faqs = t.raw('items') as Array<{ q: string; a: string }>;
+
   return (
     <section className="py-24 px-4 section-divider bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
       {/* 背景装饰 */}
@@ -97,9 +66,9 @@ export default function FAQ() {
       <div className="max-w-3xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-sm text-blue-400 uppercase tracking-wider font-semibold mb-3">FAQ</p>
+          <p className="text-sm text-blue-400 uppercase tracking-wider font-semibold mb-3">{t('badge')}</p>
           <h2 className="text-5xl font-bold text-white mb-6 tracking-tight drop-shadow-lg">
-            Common Questions About Seedance 2.0
+            {t('title')}
           </h2>
         </div>
 
@@ -111,7 +80,7 @@ export default function FAQ() {
             border: '1px solid rgba(255, 255, 255, 0.1)',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
           }}>
-          {FAQS.map((item, i) => (
+          {faqs.map((item, i) => (
             <FAQItem key={i} q={item.q} a={item.a} index={i}/>
           ))}
         </div>

@@ -35,6 +35,212 @@
   },
   "common": {
     "backToHome": "Back to Home"
+  },
+  "features": {
+    "textToVideo": {
+      "label": "Text to Video",
+      "title": "Text to Video AI",
+      "desc": "Type a scene, get a video. Turn your words into 1080p footage with synchronized audio. No filming required.",
+      "cta": "Try Seedance 2.0",
+      "prompt": "A father and his young son stand together on a circular stone platform before a massive ancient portal gateway. The portal glows with swirling bright blue cosmic energy. Cinematic wide shot, dramatic blue lighting, sci-fi fantasy atmosphere."
+    },
+    "imageToVideo": {
+      "label": "Image to Video",
+      "title": "Image to Video AI",
+      "desc": "Drop in a photo, Seedance 2.0 does the rest. Animate any still image with natural motion and synchronized sound.",
+      "cta": "Try Image to Video",
+      "prompt": "The camera follows a man in black sprinting through the streets. A crowd chases behind him. Chaotic shouts echo from the crowd."
+    },
+    "reference": {
+      "label": "Reference to Video",
+      "title": "Reference to Video AI",
+      "desc": "Give Seedance 2.0 your reference images or clips and it builds new video around them. AI video generation with style and motion you actually control.",
+      "cta": "Try Reference to Video",
+      "prompt": "Use the female star from @Image1 as the main subject, reference the camera movements from @Video1. The star's dance moves also reference the woman's dance, performing energetically on stage."
+    },
+    "extension": {
+      "label": "Video Extension",
+      "title": "AI Video Extension",
+      "desc": "Need a longer clip? Seedance 2.0 picks up where your footage ends and keeps the look consistent.",
+      "cta": "Try Video Extension",
+      "prompt": "Extend 15 seconds. A donkey rides a motorcycle through a surreal advertisement world, referencing the character design from the provided images."
+    },
+    "editing": {
+      "label": "Video Editing",
+      "title": "AI Video Editing",
+      "desc": "Change styles, swap elements, or adjust existing clips. Seedance 2.0 re-renders your video while keeping the original structure.",
+      "cta": "Try Video Editing",
+      "prompt": "Change the scene to cyberpunk style with neon lighting and futuristic city background. Keep characters and actions the same."
+    },
+    "promptLabel": "Prompt"
+  },
+  "whoItsFor": {
+    "badge": "WHO IT'S FOR",
+    "title": "Made for Every Creator",
+    "description": "Animation, film, manga series, YouTube content, product demos. Seedance 2.0 is your AI video generator.",
+    "animators": {
+      "label": "Animators & Artists",
+      "title": "Animate Your Art",
+      "desc": "Animate characters, create manga series, and produce cartoon episodes with Seedance 2.0.",
+      "features": {
+        "characterAnimation": {
+          "title": "Character Animation",
+          "desc": "Bring illustrated characters to life. Upload your artwork and Seedance 2.0 handles motion, expressions, and lip sync."
+        },
+        "mangaVideos": {
+          "title": "Manga & Comic Videos",
+          "desc": "Turn static manga panels into animated episodes with Seedance 2.0. Consistent characters across every scene."
+        },
+        "cartoonSeries": {
+          "title": "Cartoon Series",
+          "desc": "Produce multi-episode animated series. Same characters, same style, different stories."
+        },
+        "motionGraphics": {
+          "title": "Motion Graphics",
+          "desc": "Animated logos, title sequences, and visual effects. No After Effects required."
+        }
+      }
+    },
+    "filmmakers": {
+      "label": "Filmmakers",
+      "title": "Cinematic AI Video",
+      "desc": "Create cinematic sequences, test shots, and produce scenes without a crew or equipment.",
+      "features": {
+        "scenePreviz": {
+          "title": "Scene Previz",
+          "desc": "Visualize scenes before shooting. Test camera angles, lighting, and compositions in seconds."
+        },
+        "bRoll": {
+          "title": "B-Roll Generation",
+          "desc": "Generate supplemental footage from text descriptions. Perfect for documentaries and explainers."
+        },
+        "multiShot": {
+          "title": "Multi-Shot Sequences",
+          "desc": "Consistent characters and style across scenes. Tell longer stories without drift."
+        },
+        "postProduction": {
+          "title": "Post-Production",
+          "desc": "AI video editing to swap elements, change styles, or extend existing footage."
+        }
+      }
+    },
+    "creators": {
+      "label": "Content Creators",
+      "title": "Content at Scale",
+      "desc": "Produce YouTube videos, TikTok content, and social media clips faster than ever before.",
+      "features": {
+        "socialClips": {
+          "title": "Social Clips",
+          "desc": "Vertical, square, or horizontal — every format for every platform. One tool, all outputs."
+        },
+        "beatSync": {
+          "title": "Beat Sync Videos",
+          "desc": "Feed images and a rhythm track. AI cuts and transitions on beat, automatically."
+        },
+        "thumbnails": {
+          "title": "Thumbnails & Hooks",
+          "desc": "Generate eye-catching opening sequences and thumbnails with a single prompt."
+        },
+        "seriesProduction": {
+          "title": "Series Production",
+          "desc": "Maintain consistent branding across hundreds of clips without manual effort."
+        }
+      }
+    },
+    "marketers": {
+      "label": "Marketers & Teams",
+      "title": "Marketing at Speed",
+      "desc": "Create product demos, ads, and explainer videos without a video production budget.",
+      "features": {
+        "productDemos": {
+          "title": "Product Demos",
+          "desc": "Show your product in action with AI-generated demonstration videos."
+        },
+        "adCreatives": {
+          "title": "Ad Creatives",
+          "desc": "Generate multiple ad variations from a single brief. Test what converts."
+        },
+        "explainerVideos": {
+          "title": "Explainer Videos",
+          "desc": "Turn complex concepts into clear animated explanations in minutes."
+        },
+        "brandContent": {
+          "title": "Brand Content",
+          "desc": "Consistent visual style across all video content. No filmmaker required."
+        }
+      }
+    }
+  },
+  "howItWorks": {
+    "badge": "How It Works",
+    "title": "From Idea to Video with Seedance 2.0",
+    "description": "Describe your video, let Seedance 2.0 do the work, download your result. No editing skills needed.",
+    "steps": {
+      "describe": {
+        "title": "Describe Your Scene",
+        "desc": "Write what you want to see. A product demo with voiceover, or a cinematic landscape with ambient music. Add reference images for better results."
+      },
+      "generate": {
+        "title": "Generate Your Video",
+        "desc": "Seedance 2.0 processes your input and creates video, audio, and transitions simultaneously. Most clips are ready in under 60 seconds."
+      },
+      "download": {
+        "title": "Download and Use",
+        "desc": "Your video is ready in 1080p. Download, share to social platforms, or edit further. Not happy? Regenerate with adjusted prompts."
+      }
+    },
+    "stats": {
+      "resolution": {
+        "value": "1080p",
+        "label": "Output Resolution"
+      },
+      "time": {
+        "value": "< 60s",
+        "label": "Generation Time"
+      },
+      "ownership": {
+        "value": "100%",
+        "label": "You Own It"
+      }
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Common Questions About Seedance 2.0",
+    "items": [
+      {
+        "q": "What makes Seedance 2.0 different from other AI video generators?",
+        "a": "Native audio. Tools like Runway and Sora generate silent video. Seedance 2.0 creates synchronized dialogue, sound effects, and music in one step. It also supports multi-shot storytelling with character consistency across scenes."
+      },
+      {
+        "q": "How long does Seedance 2.0 take to generate a video?",
+        "a": "Most videos are ready in 30 to 60 seconds. Video, audio, and transitions are processed simultaneously, so there is no separate audio syncing step."
+      },
+      {
+        "q": "What resolution does Seedance 2.0 output?",
+        "a": "1080p. Sharp enough for YouTube, TikTok, Instagram, and professional presentations."
+      },
+      {
+        "q": "Can I use images as input for Seedance 2.0?",
+        "a": "Yes. Seedance 2.0 supports both text-to-video and image-to-video. You can upload up to 12 references per project — images, video clips, and audio to guide the output."
+      },
+      {
+        "q": "Is Seedance 2.0 free to use?",
+        "a": "Yes. Start for free, no credit card required. The free tier includes standard quality output. Upgrade for 1080p resolution, longer videos, and priority generation."
+      },
+      {
+        "q": "Do characters stay consistent in Seedance 2.0 videos?",
+        "a": "Yes. Same face, clothing, and style across every frame and scene. No character drift, even in multi-shot sequences."
+      },
+      {
+        "q": "What output formats does Seedance 2.0 support?",
+        "a": "MP4 and WebM. Compatible with all major platforms and editing software."
+      },
+      {
+        "q": "Who owns the videos I create with Seedance 2.0?",
+        "a": "You do. Full commercial rights, no attribution required."
+      }
+    ]
   }
 }
 

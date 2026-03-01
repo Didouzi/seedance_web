@@ -44,31 +44,21 @@ export default function LanguageSwitcher() {
       pathWithoutLocale = '/' + segments.join('/');
     }
 
-    // 确保路径以 / 开头
-    if (!pathWithoutLocale.startsWith('/')) {
-      pathWithoutLocale = '/' + pathWithoutLocale;
+    // 如果路径为空或只有 /，设置为根路径
+    if (!pathWithoutLocale || pathWithoutLocale === '/') {
+      pathWithoutLocale = '';
     }
 
-    // 如果路径为空，设置为根路径
-    if (pathWithoutLocale === '/' || pathWithoutLocale === '') {
-      pathWithoutLocale = '/';
-    }
-
-    // 构建新路径
-    let newPath = '';
-    if (langCode === 'zh') {
-      // 中文是默认语言，不需要前缀
-      newPath = pathWithoutLocale;
-    } else {
-      // 其他语言需要前缀
-      newPath = `/${langCode}${pathWithoutLocale}`;
-    }
+    // 构建新路径 - 所有语言都使用前缀
+    const newPath = `/${langCode}${pathWithoutLocale}`;
 
     console.log('[LanguageSwitcher] Switching from', locale, 'to', langCode);
     console.log('[LanguageSwitcher] Current path:', pathname);
+    console.log('[LanguageSwitcher] Path without locale:', pathWithoutLocale);
     console.log('[LanguageSwitcher] New path:', newPath);
 
-    router.push(newPath);
+    // 使用完整页面刷新来确保所有组件都重新渲染
+    window.location.href = newPath;
   };
 
   return (

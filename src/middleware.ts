@@ -8,7 +8,7 @@ const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale: 'zh',
   localeDetection: true,
-  localePrefix: 'as-needed'
+  localePrefix: 'always' // 所有语言都使用前缀
 });
 
 // 需要登录才能访问的路径

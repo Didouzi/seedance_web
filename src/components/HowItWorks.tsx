@@ -1,11 +1,11 @@
 "use client";
+import { useTranslations } from "next-intl";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
-const STEPS = [
+const STEPS_CONFIG = [
   {
+    id: "describe",
     num: "01",
-    title: "Describe Your Scene",
-    desc: "Write what you want to see. A product demo with voiceover, or a cinematic landscape with ambient music. Add reference images for better results.",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" strokeLinecap="round" strokeLinejoin="round"/>
@@ -14,9 +14,8 @@ const STEPS = [
     color: "#7c3aed",
   },
   {
+    id: "generate",
     num: "02",
-    title: "Generate Your Video",
-    desc: "Seedance 2.0 processes your input and creates video, audio, and transitions simultaneously. Most clips are ready in under 60 seconds.",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M5 3l14 9-14 9V3z" strokeLinecap="round" strokeLinejoin="round"/>
@@ -25,9 +24,8 @@ const STEPS = [
     color: "#3b82f6",
   },
   {
+    id: "download",
     num: "03",
-    title: "Download and Use",
-    desc: "Your video is ready in 1080p. Download, share to social platforms, or edit further. Not happy? Regenerate with adjusted prompts.",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -38,6 +36,7 @@ const STEPS = [
 ];
 
 export default function HowItWorks() {
+  const t = useTranslations('howItWorks');
   const { ref, isVisible } = useScrollAnimation(0.2);
 
   return (
@@ -55,67 +54,62 @@ export default function HowItWorks() {
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-sm text-blue-400 uppercase tracking-wider font-semibold mb-3">How It Works</p>
+          <p className="text-sm text-blue-400 uppercase tracking-wider font-semibold mb-3">{t('badge')}</p>
           <h2 className="text-5xl font-bold text-white mb-6 tracking-tight drop-shadow-lg">
-            From Idea to Video with Seedance 2.0
+            {t('title')}
           </h2>
           <p className="text-gray-300 text-lg max-w-xl mx-auto font-medium">
-            Describe your video, let Seedance 2.0 do the work, download your result. No editing skills needed.
+            {t('description')}
           </p>
         </div>
 
         {/* Steps */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {STEPS.map((step, i) => (
-            <div key={step.num} className="relative">
-              {/* Connector line */}
-              {i < STEPS.length - 1 && (
-                <div className="hidden md:block absolute top-10 left-[calc(100%-16px)] w-full h-px z-0"
-                  style={{ background: "linear-gradient(90deg, rgba(59,130,246,0.3), rgba(147,51,234,0.1))" }}/>
-              )}
-
-              <div className="rounded-2xl p-8 relative z-10 transition-all duration-300 group hover:shadow-lg hover:bg-white/10"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(24px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-                }}>
-                {/* Step number */}
-                <div className="text-6xl font-black mb-4"
-                  style={{ color: `${step.color}15`, WebkitTextStroke: `1px ${step.color}50` }}>
-                  {step.num}
-                </div>
-
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-xl mb-5 flex items-center justify-center group-hover:scale-110 transition-transform"
-                  style={{ background: `${step.color}30`, color: step.color }}>
-                  {step.icon}
-                </div>
-
-                <h3 className="text-xl font-bold text-white mb-3 drop-shadow-md">{step.title}</h3>
-                <p className="text-gray-300 leading-relaxed font-medium">{step.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Stats */}
-        <div className="mt-16 grid grid-cols-3 gap-4">
-          {[
-            { value: "1080p", label: "Output Resolution" },
-            { value: "< 60s", label: "Generation Time" },
-            { value: "100%", label: "You Own It" },
-          ].map(stat => (
-            <div key={stat.value} className="rounded-2xl p-6 text-center"
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          {STEPS_CONFIG.map((step) => (
+            <div key={step.num} className="rounded-2xl p-8 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
               style={{
                 background: 'rgba(255, 255, 255, 0.05)',
                 backdropFilter: 'blur(24px)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
               }}>
-              <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-1 drop-shadow-lg">{stat.value}</div>
-              <div className="text-sm text-gray-300 font-medium">{stat.label}</div>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300"
+                  style={{
+                    background: `linear-gradient(135deg, ${step.color}20, ${step.color}40)`,
+                    border: `2px solid ${step.color}`,
+                    boxShadow: `0 4px 16px ${step.color}40`
+                  }}>
+                  <div style={{ color: step.color }}>
+                    {step.icon}
+                  </div>
+                </div>
+                <span className="text-5xl font-bold bg-gradient-to-br from-blue-400 to-purple-400 bg-clip-text text-transparent drop-shadow-lg">
+                  {step.num}
+                </span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-3 tracking-tight drop-shadow-lg">{t(`steps.${step.id}.title`)}</h3>
+              <p className="text-gray-300 leading-relaxed font-medium">
+                {t(`steps.${step.id}.desc`)}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Stats */}
+        <div className="mt-16 grid grid-cols-3 gap-4">
+          {['resolution', 'time', 'ownership'].map(statKey => (
+            <div key={statKey} className="rounded-2xl p-6 text-center"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(24px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              }}>
+              <div className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-1 drop-shadow-lg">
+                {t(`stats.${statKey}.value`)}
+              </div>
+              <div className="text-sm text-gray-300 font-medium">{t(`stats.${statKey}.label`)}</div>
             </div>
           ))}
         </div>
